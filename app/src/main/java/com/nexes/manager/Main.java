@@ -523,53 +523,7 @@ public final class Main extends ListActivity {
     		mHandler.updateDirectory(mFileMag.getNextDir(mFileMag.getCurrentDir(), true));
     	}
     }
-    
-    /* ================Menus, options menu and context menu start here=================*/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0, MENU_MKDIR, 0, "New Directory").setIcon(R.drawable.newfolder);
-    	menu.add(0, MENU_SEARCH, 0, "Search").setIcon(R.drawable.search);
-    	
-    		/* free space will be implemented at a later time */
-//    	menu.add(0, MENU_SPACE, 0, "Free space").setIcon(R.drawable.space);
-    	menu.add(0, MENU_SETTING, 0, "Settings").setIcon(R.drawable.setting);
-    	menu.add(0, MENU_QUIT, 0, "Quit").setIcon(R.drawable.logout);
-    	
-    	return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch(item.getItemId()) {
-    		case MENU_MKDIR:
-    			showDialog(MENU_MKDIR);
-    			return true;
-    			
-    		case MENU_SEARCH:
-    			showDialog(MENU_SEARCH);
-    			return true;
-    			
-    		case MENU_SPACE: /* not yet implemented */
-    			return true;
-    			
-    		case MENU_SETTING:
-    			Intent settings_int = new Intent(this, Settings.class);
-    			settings_int.putExtra("HIDDEN", mSettings.getBoolean(PREFS_HIDDEN, false));
-    			settings_int.putExtra("THUMBNAIL", mSettings.getBoolean(PREFS_THUMBNAIL, true));
-    			settings_int.putExtra("COLOR", mSettings.getInt(PREFS_COLOR, -1));
-    			settings_int.putExtra("SORT", mSettings.getInt(PREFS_SORT, 0));
-    			settings_int.putExtra("SPACE", mSettings.getInt(PREFS_STORAGE, View.VISIBLE));
-    			
-    			startActivityForResult(settings_int, SETTING_REQ);
-    			return true;
-    			
-    		case MENU_QUIT:
-    			finish();
-    			return true;
-    	}
-    	return false;
-    }
-    
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
     	super.onCreateContextMenu(menu, v, info);
