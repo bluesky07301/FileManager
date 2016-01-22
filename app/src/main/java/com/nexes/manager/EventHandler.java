@@ -498,7 +498,7 @@ public class EventHandler implements OnClickListener {
     							i = new Intent(mContext, ProcessManager.class);
     							mContext.startActivity(i);
     							break;
-    	
+
     					}
     				}
     			});
