@@ -558,29 +558,6 @@ public final class Main extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
     	switch(item.getItemId()) {
-    		case D_MENU_DELETE:
-    		case F_MENU_DELETE:
-    			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    			builder.setTitle("Warning ");
-    			builder.setIcon(R.drawable.warning);
-    			builder.setMessage("Deleting " + mSelectedListItem +
-    							" cannot be undone. Are you sure you want to delete?");
-    			builder.setCancelable(false);
-    			
-    			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-    			});
-    			builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						mHandler.deleteFile(mFileMag.getCurrentDir() + "/" + mSelectedListItem);
-					}
-    			});
-    			AlertDialog alert_d = builder.create();
-    			alert_d.show();
-    			return true;
-    			
     		case D_MENU_RENAME:
     			showDialog(D_MENU_RENAME);
     			return true;
