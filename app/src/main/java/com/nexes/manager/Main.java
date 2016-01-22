@@ -113,7 +113,7 @@ public final class Main extends ListActivity {
 	private String mCopiedTarget;
 	private String mZippedTarget;
 	private String mSelectedListItem;				//item from context menu
-	private TextView  mPathLabel, mDetailLabel, mStorageLabel;
+	private TextView  mPathLabel, mStorageLabel;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +125,6 @@ public final class Main extends ListActivity {
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         boolean hide = mSettings.getBoolean(PREFS_HIDDEN, false);
         boolean thumb = mSettings.getBoolean(PREFS_THUMBNAIL, true);
-        int space = mSettings.getInt(PREFS_STORAGE, View.VISIBLE);
         int color = mSettings.getInt(PREFS_COLOR, -1);
         int sort = mSettings.getInt(PREFS_SORT, 3);
         
@@ -151,15 +150,13 @@ public final class Main extends ListActivity {
         /* register context menu for our list view */
         registerForContextMenu(getListView());
         
-        mStorageLabel = (TextView)findViewById(R.id.storage_label);
-        mDetailLabel = (TextView)findViewById(R.id.detail_label);
+//        mStorageLabel = (TextView)findViewById(R.id.storage_label);
         mPathLabel = (TextView)findViewById(R.id.path_label);
         mPathLabel.setText("path: /sdcard");
         
         updateStorageLabel();
-        mStorageLabel.setVisibility(space);
-        
-        mHandler.setUpdateLabels(mPathLabel, mDetailLabel);
+
+        mHandler.setUpdateLabels(mPathLabel);
         
         /* setup buttons */
         int[] img_button_id = {R.id.back_button, R.id.home_button};
@@ -224,9 +221,9 @@ public final class Main extends ListActivity {
 		total = fs.getBlockCount() * (fs.getBlockSize() / kb);
 		aval = fs.getAvailableBlocks() * (fs.getBlockSize() / kb);
 		
-		mStorageLabel.setText(String.format("sdcard: Total %.2f GB " +
-							  "\t\tAvailable %.2f GB", 
-							  (double)total / (kb * kb), (double)aval / (kb * kb)));
+//		mStorageLabel.setText(String.format("sdcard: Total %.2f GB " +
+//							  "\t\tAvailable %.2f GB",
+//							  (double)total / (kb * kb), (double)aval / (kb * kb)));
 	}
 	
 	/**
@@ -328,42 +325,6 @@ public final class Main extends ListActivity {
 			    		movieIntent.setDataAndType(Uri.fromFile(file), "video/*");
 			    		startActivity(movieIntent);
 	    			}
-	    		}
-	    	}
-	    	
-	    	/*zip file */
-	    	else if(item_ext.equalsIgnoreCase(".zip")) {
-	    		
-	    		if(mReturnIntent) {
-	    			returnIntentResults(file);
-	    			
-	    		} else {
-		    		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		    		AlertDialog alert;
-		    		mZippedTarget = mFileMag.getCurrentDir() + "/" + item;
-		    		CharSequence[] option = {"Extract here", "Extract to..."};
-		    		
-		    		builder.setTitle("Extract");
-		    		builder.setItems(option, new DialogInterface.OnClickListener() {
-		
-						public void onClick(DialogInterface dialog, int which) {
-							switch(which) {
-								case 0:
-									String dir = mFileMag.getCurrentDir();
-									mHandler.unZipFile(item, dir + "/");
-									break;
-									
-								case 1:
-									mDetailLabel.setText("Holding " + item + 
-														 " to extract");
-									mHoldingZip = true;
-									break;
-							}
-						}
-		    		});
-		    		
-		    		alert = builder.create();
-		    		alert.show();
 	    		}
 	    	}
 	    	
@@ -493,7 +454,7 @@ public final class Main extends ListActivity {
     	SharedPreferences.Editor editor = mSettings.edit();
     	boolean check;
     	boolean thumbnail;
-    	int color, sort, space;
+    	int color, sort;
     	
     	/* resultCode must equal RESULT_CANCELED because the only way
     	 * out of that activity is pressing the back button on the phone
@@ -505,20 +466,17 @@ public final class Main extends ListActivity {
     		thumbnail = data.getBooleanExtra("THUMBNAIL", true);
     		color = data.getIntExtra("COLOR", -1);
     		sort = data.getIntExtra("SORT", 0);
-    		space = data.getIntExtra("SPACE", View.VISIBLE);
-    		
+
     		editor.putBoolean(PREFS_HIDDEN, check);
     		editor.putBoolean(PREFS_THUMBNAIL, thumbnail);
     		editor.putInt(PREFS_COLOR, color);
     		editor.putInt(PREFS_SORT, sort);
-    		editor.putInt(PREFS_STORAGE, space);
     		editor.commit();
     		  		
     		mFileMag.setShowHiddenFiles(check);
     		mFileMag.setSortType(sort);
     		mHandler.setTextColor(color);
     		mHandler.setShowThumbnails(thumbnail);
-    		mStorageLabel.setVisibility(space);
     		mHandler.updateDirectory(mFileMag.getNextDir(mFileMag.getCurrentDir(), true));
     	}
     }
@@ -576,62 +534,7 @@ public final class Main extends ListActivity {
     			mail_int.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
     			startActivity(mail_int);
     			return true;
-    		
-    		case F_MENU_MOVE:
-    		case D_MENU_MOVE:
-    		case F_MENU_COPY:
-    		case D_MENU_COPY:
-    			if(item.getItemId() == F_MENU_MOVE || item.getItemId() == D_MENU_MOVE)
-    				mHandler.setDeleteAfterCopy(true);
-    			
-    			mHoldingFile = true;
-    			
-    			mCopiedTarget = mFileMag.getCurrentDir() +"/"+ mSelectedListItem;
-    			mDetailLabel.setText("Holding " + mSelectedListItem);
-    			return true;
-    			
-    		
-    		case D_MENU_PASTE:
-    			boolean multi_select = mHandler.hasMultiSelectData();
-    			
-    			if(multi_select) {
-    				mHandler.copyFileMultiSelect(mFileMag.getCurrentDir() +"/"+ mSelectedListItem);
-    				
-    			} else if(mHoldingFile && mCopiedTarget.length() > 1) {
-    				
-    				mHandler.copyFile(mCopiedTarget, mFileMag.getCurrentDir() +"/"+ mSelectedListItem);
-    				mDetailLabel.setText("");
-    			}
-    			    			   			
-    			mHoldingFile = false;
-    			return true;
-    			
-    		case D_MENU_ZIP:
-    			String dir = mFileMag.getCurrentDir();
-    			
-    			mHandler.zipFile(dir + "/" + mSelectedListItem);
-    			return true;
-    			
-    		case D_MENU_UNZIP:
-    			if(mHoldingZip && mZippedTarget.length() > 1) {
-    				String current_dir = mFileMag.getCurrentDir() + "/" + mSelectedListItem + "/";
-    				String old_dir = mZippedTarget.substring(0, mZippedTarget.lastIndexOf("/"));
-    				String name = mZippedTarget.substring(mZippedTarget.lastIndexOf("/") + 1, mZippedTarget.length());
-    				
-    				if(new File(mZippedTarget).canRead() && new File(current_dir).canWrite()) {
-	    				mHandler.unZipFileToDir(name, current_dir, old_dir);				
-	    				mPathLabel.setText(current_dir);
-	    				
-    				} else {
-    					Toast.makeText(this, "You do not have permission to unzip " + name, 
-    							Toast.LENGTH_SHORT).show();
-    				}
-    			}
-    			
-    			mHoldingZip = false;
-    			mDetailLabel.setText("");
-    			mZippedTarget = "";
-    			return true;
+
     	}
     	return false;
     }
