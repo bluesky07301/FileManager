@@ -458,7 +458,6 @@ public class EventHandler implements OnClickListener {
 		TextView topView;
 		TextView bottomView;
 		ImageView icon;
-		ImageView mSelect;	//multi-select check mark icon
 	}
 
 	
@@ -561,19 +560,13 @@ public class EventHandler implements OnClickListener {
     			mViewHolder.topView = (TextView)convertView.findViewById(R.id.top_view);
     			mViewHolder.bottomView = (TextView)convertView.findViewById(R.id.bottom_view);
     			mViewHolder.icon = (ImageView)convertView.findViewById(R.id.row_image);
-    			mViewHolder.mSelect = (ImageView)convertView.findViewById(R.id.multiselect_icon);
-    			
+
     			convertView.setTag(mViewHolder);
     			
     		} else {
     			mViewHolder = (ViewHolder)convertView.getTag();
     		}   			
     		  		
-    		if (positions != null && positions.contains(position))
-    			mViewHolder.mSelect.setVisibility(ImageView.VISIBLE);
-    		else
-    			mViewHolder.mSelect.setVisibility(ImageView.GONE);
-
     		mViewHolder.topView.setTextColor(mColor);
     		mViewHolder.bottomView.setTextColor(mColor);
     		
