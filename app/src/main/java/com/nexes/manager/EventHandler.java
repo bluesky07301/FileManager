@@ -34,6 +34,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,7 +104,7 @@ public class EventHandler implements OnClickListener {
 		mFileMang = manager;
 		
 		mDataSource = new ArrayList<String>(mFileMang.setHomeDir
-						(Environment.getExternalStorageDirectory().getPath()));
+				(Environment.getExternalStorageDirectory().getPath()));
 	}
 	
 	/**
@@ -312,7 +313,8 @@ public class EventHandler implements OnClickListener {
 				}
 				break;
 			
-			case R.id.home_button:		
+			case R.id.home_button:
+				Log.d("bluesky", "home_button pressed");
 				if(multi_select_flag) {
 					mDelegate.killMultiSelect(true);
 					Toast.makeText(mContext, "Multi-select is now off", 
@@ -688,10 +690,7 @@ public class EventHandler implements OnClickListener {
     			}
     			
     		} else if (file != null && file.isDirectory()) {
-    			if (file.canRead() && file.list().length > 0)
-    				mViewHolder.icon.setImageResource(R.drawable.folder_full);
-    			else
-    				mViewHolder.icon.setImageResource(R.drawable.folder);
+    			mViewHolder.icon.setImageResource(R.drawable.folder);
     		}
     		    		
     		String permission = getFilePermissions(file);

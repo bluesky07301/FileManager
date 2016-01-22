@@ -162,23 +162,23 @@ public final class Main extends ListActivity {
         mHandler.setUpdateLabels(mPathLabel, mDetailLabel);
         
         /* setup buttons */
-        int[] img_button_id = {R.id.help_button, R.id.home_button, 
+        int[] img_button_id = {R.id.back_button, R.id.home_button,
         					   R.id.multiselect_button};
         
         int[] button_id = {R.id.hidden_copy, R.id.hidden_attach,
-        				   R.id.hidden_delete, R.id.hidden_move};
+        				   R.id.hidden_delete, R.id.hidden_move, R.id.help_button};
         
         ImageButton[] bimg = new ImageButton[img_button_id.length];
         Button[] bt = new Button[button_id.length];
         
         for(int i = 0; i < img_button_id.length; i++) {
-        	bimg[i] = (ImageButton)findViewById(img_button_id[i]);
-        	bimg[i].setOnClickListener(mHandler);
+			bimg[i] = (ImageButton) findViewById(img_button_id[i]);
+			bimg[i].setOnClickListener(mHandler);
+		}
 
-        	if(i < 4) {
-        		bt[i] = (Button)findViewById(button_id[i]);
-        		bt[i].setOnClickListener(mHandler);
-        	}
+		for(int j = 0; j < button_id.length; j++) {
+        	bt[j] = (Button)findViewById(button_id[j]);
+        	bt[j].setOnClickListener(mHandler);
         }
     
         Intent intent = getIntent();

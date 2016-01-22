@@ -62,14 +62,14 @@
     			android:layout_marginTop="6dp"
     			android:src="@drawable/multiselect_38"
     			android:id="@+id/multiselect_button"/>
-    		<ImageButton
+    		<Button
     			android:layout_width="wrap_content"
     			android:layout_height="wrap_content"
     			android:padding="6dp"
     			android:layout_marginRight="2dp"
     			android:layout_marginTop="6dp"
-    			android:src="@drawable/help"
-    			android:id="@+id/help_button"/>
+				android:text="@string/memory_info"
+				android:id="@+id/help_button"/>
     	</LinearLayout>
     </HorizontalScrollView>
     	<TextView
