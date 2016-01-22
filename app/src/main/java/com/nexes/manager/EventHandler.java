@@ -498,16 +498,7 @@ public class EventHandler implements OnClickListener {
     							i = new Intent(mContext, ProcessManager.class);
     							mContext.startActivity(i);
     							break;
-    	/*
-    						case 1:
-    							i = new Intent(context, WirelessManager.class);
-    							context.startActivity(i);
-    							break;
-    	*/
-    						case 1:
-    							i = new Intent(mContext, ApplicationBackup.class);
-    							mContext.startActivity(i);
-    							break;
+    	
     					}
     				}
     			});
