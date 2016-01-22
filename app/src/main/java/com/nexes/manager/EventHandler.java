@@ -314,7 +314,6 @@ public class EventHandler implements OnClickListener {
 				break;
 			
 			case R.id.home_button:
-				Log.d("bluesky", "home_button pressed");
 				if(multi_select_flag) {
 					mDelegate.killMultiSelect(true);
 					Toast.makeText(mContext, "Multi-select is now off", 
@@ -332,20 +331,7 @@ public class EventHandler implements OnClickListener {
 				mContext.startActivity(help);
 				break;
 				
-			case R.id.multiselect_button:
-				if(multi_select_flag) {
-					mDelegate.killMultiSelect(true);				
-					
-				} else {
-					LinearLayout hidden_lay = 
-						(LinearLayout)((Activity) mContext).findViewById(R.id.hidden_buttons);
-					
-					multi_select_flag = true;
-					hidden_lay.setVisibility(LinearLayout.VISIBLE);
-				}
-				break;
-			
-			/* 
+			/*
 			 * three hidden buttons for multiselect
 			 */
 			case R.id.hidden_attach:
