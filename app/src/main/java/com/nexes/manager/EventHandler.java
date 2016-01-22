@@ -330,11 +330,7 @@ public class EventHandler implements OnClickListener {
 				mContext.startActivity(help);
 				break;
 				
-			case R.id.manage_button:
-				display_dialog(MANAGE_DIALOG);
-				break;
-				
-			case R.id.multiselect_button:			
+			case R.id.multiselect_button:
 				if(multi_select_flag) {
 					mDelegate.killMultiSelect(true);				
 					
@@ -469,39 +465,7 @@ public class EventHandler implements OnClickListener {
 	 * seem to fit with the overall idea of the application. However to display it, just 
 	 * uncomment the below code and the code in the AndroidManifest.xml file.
 	 */
-	private void display_dialog(int type) {
-		AlertDialog.Builder builder;
-    	AlertDialog dialog;
-    	
-    	switch(type) {
-    		case MANAGE_DIALOG:
-    			//un-comment WIFI Info here and in the manifest file 
-    	    	//to display WIFI info. Also uncomment and change case number below
-    	    	CharSequence[] options = {"Process Info", /*"Wifi Info",*/ "Application backup"};
-    	    	
-    	    	builder = new AlertDialog.Builder(mContext);
-    	    	builder.setTitle("Tool Box");
-    	    	builder.setIcon(R.drawable.toolbox);
-    	    	builder.setItems(options, new DialogInterface.OnClickListener() {
-    	    		
-    				public void onClick(DialogInterface dialog, int index) {
-    					Intent i;
-    					
-    					switch(index) {
-    						case 0:
-    							i = new Intent(mContext, ProcessManager.class);
-    							mContext.startActivity(i);
-    							break;
 
-    					}
-    				}
-    			});
-    	    	dialog = builder.create();
-    	    	dialog.show();
-    			break;
-    	}
-	}
-	
 	private static class ViewHolder {
 		TextView topView;
 		TextView bottomView;

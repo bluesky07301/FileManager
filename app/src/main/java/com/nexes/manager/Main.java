@@ -163,7 +163,7 @@ public final class Main extends ListActivity {
         
         /* setup buttons */
         int[] img_button_id = {R.id.help_button, R.id.home_button, 
-        					   R.id.manage_button, R.id.multiselect_button};
+        					   R.id.multiselect_button};
         
         int[] button_id = {R.id.hidden_copy, R.id.hidden_attach,
         				   R.id.hidden_delete, R.id.hidden_move};
@@ -717,28 +717,28 @@ public final class Main extends ListActivity {
     			dialog.setContentView(R.layout.input_layout);
     			dialog.setTitle("Create New Directory");
     			dialog.setCancelable(false);
-    			
+
     			ImageView icon = (ImageView)dialog.findViewById(R.id.input_icon);
     			icon.setImageResource(R.drawable.newfolder);
-    			
+
     			TextView label = (TextView)dialog.findViewById(R.id.input_label);
     			label.setText(mFileMag.getCurrentDir());
     			final EditText input = (EditText)dialog.findViewById(R.id.input_inputText);
-    			
+
     			Button cancel = (Button)dialog.findViewById(R.id.input_cancel_b);
     			Button create = (Button)dialog.findViewById(R.id.input_create_b);
-    			
+
     			create.setOnClickListener(new OnClickListener() {
     				public void onClick (View v) {
     					if (input.getText().length() > 1) {
     						if (mFileMag.createDir(mFileMag.getCurrentDir() + "/", input.getText().toString()) == 0)
-    							Toast.makeText(Main.this, 
-    										   "Folder " + input.getText().toString() + " created", 
+    							Toast.makeText(Main.this,
+    										   "Folder " + input.getText().toString() + " created",
     										   Toast.LENGTH_LONG).show();
     						else
     							Toast.makeText(Main.this, "New folder was not created", Toast.LENGTH_SHORT).show();
     					}
-    					
+
     					dialog.dismiss();
     					String temp = mFileMag.getCurrentDir();
     					mHandler.updateDirectory(mFileMag.getNextDir(temp, true));
@@ -747,7 +747,7 @@ public final class Main extends ListActivity {
     			cancel.setOnClickListener(new OnClickListener() {
     				public void onClick (View v) {	dialog.dismiss(); }
     			});
-    		break; 
+    		break;
     		case D_MENU_RENAME:
     		case F_MENU_RENAME:
     			dialog.setContentView(R.layout.input_layout);
