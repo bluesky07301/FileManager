@@ -325,12 +325,6 @@ public class EventHandler implements OnClickListener {
 					mPathLabel.setText(mFileMang.getCurrentDir());
 				break;
 				
-			case R.id.info_button:
-				Intent info = new Intent(mContext, DirectoryInfo.class);
-				info.putExtra("PATH_NAME", mFileMang.getCurrentDir());
-				mContext.startActivity(info);
-				break;
-				
 			case R.id.help_button:
 				Intent help = new Intent(mContext, HelpManager.class);
 				mContext.startActivity(help);

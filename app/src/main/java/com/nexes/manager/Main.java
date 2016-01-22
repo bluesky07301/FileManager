@@ -163,7 +163,6 @@ public final class Main extends ListActivity {
         
         /* setup buttons */
         int[] img_button_id = {R.id.help_button, R.id.home_button, 
-        					   R.id.back_button, R.id.info_button, 
         					   R.id.manage_button, R.id.multiselect_button};
         
         int[] button_id = {R.id.hidden_copy, R.id.hidden_attach,
