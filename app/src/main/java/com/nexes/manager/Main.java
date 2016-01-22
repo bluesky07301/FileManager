@@ -672,9 +672,6 @@ public final class Main extends ListActivity {
     			dialog.setTitle("Rename " + mSelectedListItem);
     			dialog.setCancelable(false);
     			
-    			ImageView rename_icon = (ImageView)dialog.findViewById(R.id.input_icon);
-    			rename_icon.setImageResource(R.drawable.rename);
-    			
     			TextView rename_label = (TextView)dialog.findViewById(R.id.input_label);
     			rename_label.setText(mFileMag.getCurrentDir());
     			final EditText rename_input = (EditText)dialog.findViewById(R.id.input_inputText);
