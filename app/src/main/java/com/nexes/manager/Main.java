@@ -162,9 +162,8 @@ public final class Main extends ListActivity {
         mHandler.setUpdateLabels(mPathLabel, mDetailLabel);
         
         /* setup buttons */
-        int[] img_button_id = {R.id.back_button, R.id.home_button,
-        					   R.id.multiselect_button};
-        
+        int[] img_button_id = {R.id.back_button, R.id.home_button};
+
         int[] button_id = {R.id.hidden_copy, R.id.hidden_attach,
         				   R.id.hidden_delete, R.id.hidden_move, R.id.help_button};
         
@@ -667,41 +666,6 @@ public final class Main extends ListActivity {
     	final Dialog dialog = new Dialog(Main.this);
     	
     	switch(id) {
-    		case MENU_MKDIR:
-    			dialog.setContentView(R.layout.input_layout);
-    			dialog.setTitle("Create New Directory");
-    			dialog.setCancelable(false);
-
-    			ImageView icon = (ImageView)dialog.findViewById(R.id.input_icon);
-    			icon.setImageResource(R.drawable.newfolder);
-
-    			TextView label = (TextView)dialog.findViewById(R.id.input_label);
-    			label.setText(mFileMag.getCurrentDir());
-    			final EditText input = (EditText)dialog.findViewById(R.id.input_inputText);
-
-    			Button cancel = (Button)dialog.findViewById(R.id.input_cancel_b);
-    			Button create = (Button)dialog.findViewById(R.id.input_create_b);
-
-    			create.setOnClickListener(new OnClickListener() {
-    				public void onClick (View v) {
-    					if (input.getText().length() > 1) {
-    						if (mFileMag.createDir(mFileMag.getCurrentDir() + "/", input.getText().toString()) == 0)
-    							Toast.makeText(Main.this,
-    										   "Folder " + input.getText().toString() + " created",
-    										   Toast.LENGTH_LONG).show();
-    						else
-    							Toast.makeText(Main.this, "New folder was not created", Toast.LENGTH_SHORT).show();
-    					}
-
-    					dialog.dismiss();
-    					String temp = mFileMag.getCurrentDir();
-    					mHandler.updateDirectory(mFileMag.getNextDir(temp, true));
-    				}
-    			});
-    			cancel.setOnClickListener(new OnClickListener() {
-    				public void onClick (View v) {	dialog.dismiss(); }
-    			});
-    		break;
     		case D_MENU_RENAME:
     		case F_MENU_RENAME:
     			dialog.setContentView(R.layout.input_layout);
@@ -739,39 +703,7 @@ public final class Main extends ListActivity {
     				public void onClick (View v) {	dialog.dismiss(); }
     			});
     		break;
-    		
-    		case SEARCH_B:
-    		case MENU_SEARCH:
-    			dialog.setContentView(R.layout.input_layout);
-    			dialog.setTitle("Search");
-    			dialog.setCancelable(false);
-    			
-    			ImageView searchIcon = (ImageView)dialog.findViewById(R.id.input_icon);
-    			searchIcon.setImageResource(R.drawable.search);
-    			
-    			TextView search_label = (TextView)dialog.findViewById(R.id.input_label);
-    			search_label.setText("Search for a file");
-    			final EditText search_input = (EditText)dialog.findViewById(R.id.input_inputText);
-    			
-    			Button search_button = (Button)dialog.findViewById(R.id.input_create_b);
-    			Button cancel_button = (Button)dialog.findViewById(R.id.input_cancel_b);
-    			search_button.setText("Search");
-    			
-    			search_button.setOnClickListener(new OnClickListener() {
-    				public void onClick(View v) {
-    					String temp = search_input.getText().toString();
-    					
-    					if (temp.length() > 0)
-    						mHandler.searchForFile(temp);
-    					dialog.dismiss();
-    				}
-    			});
-    			
-    			cancel_button.setOnClickListener(new OnClickListener() {
-    				public void onClick(View v) { dialog.dismiss(); }
-    			});
 
-    		break;
     	}
     	return dialog;
     }
