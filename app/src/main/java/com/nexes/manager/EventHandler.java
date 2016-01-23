@@ -216,12 +216,6 @@ public class EventHandler implements OnClickListener {
 		
 			case R.id.back_button:			
 				if (mFileMang.getCurrentDir() != "/") {
-					if(multi_select_flag) {
-						mDelegate.killMultiSelect(true);
-						Toast.makeText(mContext, "Multi-select is now off", 
-									   Toast.LENGTH_SHORT).show();
-					}
-					
 					stopThumbnailThread();
 					updateDirectory(mFileMang.getPreviousDir());
 					if(mPathLabel != null)
@@ -230,12 +224,6 @@ public class EventHandler implements OnClickListener {
 				break;
 			
 			case R.id.home_button:
-				if(multi_select_flag) {
-					mDelegate.killMultiSelect(true);
-					Toast.makeText(mContext, "Multi-select is now off", 
-								   Toast.LENGTH_SHORT).show();
-				}
-				
 				stopThumbnailThread();
 				updateDirectory(mFileMang.setHomeDir("/sdcard"));
 				if(mPathLabel != null)
@@ -335,31 +323,7 @@ public class EventHandler implements OnClickListener {
     		
     		notifyDataSetChanged();
     	}
-   	
-    	/**
-    	 * This will turn off multi-select and hide the multi-select buttons at the
-    	 * bottom of the view. 
-    	 * 
-    	 * @param clearData if this is true any files/folders the user selected for multi-select
-    	 * 					will be cleared. If false, the data will be kept for later use. Note:
-    	 * 					multi-select copy and move will usually be the only one to pass false, 
-    	 * 					so we can later paste it to another folder.
-    	 */
-    	public void killMultiSelect(boolean clearData) {
-    		hidden_layout = (LinearLayout)((Activity)mContext).findViewById(R.id.hidden_buttons);
-    		hidden_layout.setVisibility(LinearLayout.GONE);
-    		multi_select_flag = false;
-    		
-    		if(positions != null && !positions.isEmpty())
-    			positions.clear();
-    		
-    		if(clearData)
-    			if(mMultiSelectData != null && !mMultiSelectData.isEmpty())
-    				mMultiSelectData.clear();
-    		
-    		notifyDataSetChanged();
-    	}
-    	
+
     	public String getFilePermissions(File file) {
     		String per = "-";
     	    		

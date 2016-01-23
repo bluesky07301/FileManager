@@ -161,8 +161,7 @@ public final class Main extends ListActivity {
         /* setup buttons */
         int[] img_button_id = {R.id.back_button, R.id.home_button};
 
-        int[] button_id = {R.id.hidden_copy, R.id.hidden_attach,
-        				   R.id.hidden_delete, R.id.hidden_move, R.id.help_button};
+        int[] button_id = {R.id.help_button};
         
         ImageButton[] bimg = new ImageButton[img_button_id.length];
         Button[] bt = new Button[button_id.length];
@@ -601,25 +600,14 @@ public final class Main extends ListActivity {
     		return true;
     		
     	} else if(keycode == KeyEvent.KEYCODE_BACK && mUseBackKey && !current.equals("/")) {
-    		if(mHandler.isMultiSelected()) {
-    			mTable.killMultiSelect(true);
-    			Toast.makeText(Main.this, "Multi-select is now off", Toast.LENGTH_SHORT).show();
-    		
-    		} else {
-    			//stop updating thumbnail icons if its running
-    			mHandler.stopThumbnailThread();
-	    		mHandler.updateDirectory(mFileMag.getPreviousDir());
-	    		mPathLabel.setText(mFileMag.getCurrentDir());
-    		}
+			//stop updating thumbnail icons if its running
+			mHandler.stopThumbnailThread();
+			mHandler.updateDirectory(mFileMag.getPreviousDir());
+			mPathLabel.setText(mFileMag.getCurrentDir());
     		return true;
     		
     	} else if(keycode == KeyEvent.KEYCODE_BACK && mUseBackKey && current.equals("/")) {
     		Toast.makeText(Main.this, "Press back again to quit.", Toast.LENGTH_SHORT).show();
-    		
-    		if(mHandler.isMultiSelected()) {
-    			mTable.killMultiSelect(true);
-    			Toast.makeText(Main.this, "Multi-select is now off", Toast.LENGTH_SHORT).show();
-    		}
     		
     		mUseBackKey = false;
     		mPathLabel.setText(mFileMag.getCurrentDir());
