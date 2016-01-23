@@ -161,7 +161,7 @@ public final class Main extends ListActivity {
         /* setup buttons */
         int[] img_button_id = {R.id.back_button, R.id.home_button};
 
-        int[] button_id = {R.id.help_button};
+        int[] button_id = {R.id.memory_button};
         
         ImageButton[] bimg = new ImageButton[img_button_id.length];
         Button[] bt = new Button[button_id.length];

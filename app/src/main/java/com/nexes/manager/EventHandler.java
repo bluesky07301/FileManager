@@ -230,7 +230,7 @@ public class EventHandler implements OnClickListener {
 					mPathLabel.setText(mFileMang.getCurrentDir());
 				break;
 				
-			case R.id.help_button:
+			case R.id.memory_button:
 				Intent help = new Intent(mContext, HelpManager.class);
 				mContext.startActivity(help);
 				break;
