@@ -19,6 +19,7 @@
 package com.nexes.manager;
 
 import java.io.File;
+import java.util.Calendar;
 
 import android.app.Dialog;
 import android.app.AlertDialog;
@@ -419,10 +420,45 @@ public final class Main extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
     	switch(item.getItemId()) {
-    		case F_MENU_RENAME:
-				showDialog(F_MENU_RENAME);
-    			return true;
-    			
+
+			case D_MENU_RENAME:
+			case F_MENU_RENAME:
+				AlertDialog.Builder alert;
+				alert = new AlertDialog.Builder(this);
+
+				alert.setTitle("Rename " + mSelectedListItem);
+				final EditText input = new EditText(this);
+				input.setText(mSelectedListItem);
+				input.selectAll();
+				alert.setView(input);
+
+				alert.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int whichButton) {
+
+						if (mFileMag.renameTarget(mFileMag.getCurrentDir() + "/" + mSelectedListItem, input.getText().toString()) == 0) {
+							Toast.makeText(Main.this, mSelectedListItem + " was renamed to " + input.getText().toString(),
+									Toast.LENGTH_LONG).show();
+						} else {
+							Toast.makeText(Main.this, mSelectedListItem + " was not renamed", Toast.LENGTH_LONG).show();
+						}
+
+						String temp = mFileMag.getCurrentDir();
+						mHandler.updateDirectory(mFileMag.getNextDir(temp, true));
+					}
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+
+				alert.show();
+
+				return true;
+
     		case F_MENU_ATTACH:
 				File file = new File(mFileMag.getCurrentDir() +"/"+ mSelectedListItem);
     			Intent mail_int = new Intent();
@@ -436,52 +472,6 @@ public final class Main extends ListActivity {
 
     	}
     	return false;
-    }
-    
-    /* ================Menus, options menu and context menu end here=================*/
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-    	final Dialog dialog = new Dialog(Main.this);
-    	
-    	switch(id) {
-    		case D_MENU_RENAME:
-    		case F_MENU_RENAME:
-    			dialog.setContentView(R.layout.input_layout);
-    			dialog.setTitle("Rename " + mSelectedListItem);
-    			dialog.setCancelable(false);
-    			
-    			TextView rename_label = (TextView)dialog.findViewById(R.id.input_label);
-    			rename_label.setText(mFileMag.getCurrentDir());
-    			final EditText rename_input = (EditText)dialog.findViewById(R.id.input_inputText);
-    			
-    			Button rename_cancel = (Button)dialog.findViewById(R.id.input_cancel_b);
-    			Button rename_create = (Button)dialog.findViewById(R.id.input_create_b);
-    			rename_create.setText("Rename");
-    			
-    			rename_create.setOnClickListener(new OnClickListener() {
-    				public void onClick (View v) {
-    					if(rename_input.getText().length() < 1)
-    						dialog.dismiss();
-    					
-    					if(mFileMag.renameTarget(mFileMag.getCurrentDir() +"/"+ mSelectedListItem, rename_input.getText().toString()) == 0) {
-    						Toast.makeText(Main.this, mSelectedListItem + " was renamed to " +rename_input.getText().toString(),
-    								Toast.LENGTH_LONG).show();
-    					}else
-    						Toast.makeText(Main.this, mSelectedListItem + " was not renamed", Toast.LENGTH_LONG).show();
-    						
-    					dialog.dismiss();
-    					String temp = mFileMag.getCurrentDir();
-    					mHandler.updateDirectory(mFileMag.getNextDir(temp, true));
-    				}
-    			});
-    			rename_cancel.setOnClickListener(new OnClickListener() {
-    				public void onClick (View v) {	dialog.dismiss(); }
-    			});
-    		break;
-
-    	}
-    	return dialog;
     }
     
     /*
