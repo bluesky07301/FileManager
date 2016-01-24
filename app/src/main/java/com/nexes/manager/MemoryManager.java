@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class HelpManager extends Activity implements OnClickListener {
+public class MemoryManager extends Activity implements OnClickListener {
 	private static final String[] EMAIL = {"nexesdevelopment@gmail.com"};
 	private static final String WEB = "http://nexesdevelopment.webs.com";
 	

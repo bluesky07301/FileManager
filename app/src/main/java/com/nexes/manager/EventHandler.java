@@ -94,7 +94,6 @@ public class EventHandler implements OnClickListener {
 	 * so the user knows which folder they are in.
 	 * 
 	 * @param path	The label to update as the directory changes
-	 * @param label	the label to update information
 	 */
 	public void setUpdateLabels(TextView path) {
 		mPathLabel = path;
@@ -156,7 +155,7 @@ public class EventHandler implements OnClickListener {
 				break;
 				
 			case R.id.memory_button:
-				Intent help = new Intent(mContext, HelpManager.class);
+				Intent help = new Intent(mContext, MemoryManager.class);
 				mContext.startActivity(help);
 				break;
 

@@ -34,7 +34,7 @@
 
         </activity>
 	    
-	    <activity android:name=".HelpManager"
+	    <activity android:name=".MemoryManager"
 	    		  android:label="About Open Manager"
 	    		  android:theme="@android:style/Theme.Dialog" />
 
