@@ -49,27 +49,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.util.Log;
 
-/**
- * This is the main activity. The activity that is presented to the user
- * as the application launches. This class is, and expected not to be, instantiated.
- * <br>
- * <p>
- * This class handles creating the buttons and
- * text views. This class relies on the class EventHandler to handle all button
- * press logic and to control the data displayed on its ListView. This class
- * also relies on the FileManager class to handle all file operations such as
- * copy/paste zip/unzip etc. However most interaction with the FileManager class
- * is done via the EventHandler class. Also the SettingsMangager class to load
- * and save user settings. 
- * <br>
- * <p>
- * The design objective with this class is to control only the look of the
- * GUI (option menu, context menu, ListView, buttons and so on) and rely on other
- * supporting classes to do the heavy lifting. 
- *
- * @author Joe Berria
- *
- */
+
 public final class Main extends ListActivity {
 	public static final String ACTION_WIDGET = "com.nexes.manager.Main.ACTION_WIDGET";
 	
@@ -79,13 +59,6 @@ public final class Main extends ListActivity {
 	private static final String PREFS_THUMBNAIL = "thumbnail";
 	private static final String PREFS_SORT = "sort";
 	private static final String PREFS_STORAGE = "sdcard space";
-	
-	private static final int MENU_MKDIR =   0x00;			//option menu id
-	private static final int MENU_SETTING = 0x01;			//option menu id
-	private static final int MENU_SEARCH =  0x02;			//option menu id
-	private static final int MENU_SPACE =   0x03;			//option menu id
-	private static final int MENU_QUIT = 	0x04;			//option menu id
-	private static final int SEARCH_B = 	0x09;
 	
 	private static final int D_MENU_DELETE = 0x05;			//context menu id
 	private static final int D_MENU_RENAME = 0x06;			//context menu id
@@ -110,8 +83,6 @@ public final class Main extends ListActivity {
 	private boolean mHoldingFile = false;
 	private boolean mHoldingZip = false;
 	private boolean mUseBackKey = true;
-	private String mCopiedTarget;
-	private String mZippedTarget;
 	private String mSelectedListItem;				//item from context menu
 	private TextView  mPathLabel, mStorageLabel;
 
@@ -123,7 +94,7 @@ public final class Main extends ListActivity {
         
         /*read settings*/
         mSettings = getSharedPreferences(PREFS_NAME, 0);
-        boolean hide = mSettings.getBoolean(PREFS_HIDDEN, false);
+        boolean hide = mSettings.getBoolean(PREFS_HIDDEN, true);
         boolean thumb = mSettings.getBoolean(PREFS_THUMBNAIL, true);
         int color = mSettings.getInt(PREFS_COLOR, -1);
         int sort = mSettings.getInt(PREFS_SORT, 3);
@@ -154,7 +125,7 @@ public final class Main extends ListActivity {
         mPathLabel = (TextView)findViewById(R.id.path_label);
         mPathLabel.setText("path: /sdcard");
         
-        updateStorageLabel();
+//        updateStorageLabel();
 
         mHandler.setUpdateLabels(mPathLabel);
         
@@ -220,9 +191,9 @@ public final class Main extends ListActivity {
 		total = fs.getBlockCount() * (fs.getBlockSize() / kb);
 		aval = fs.getAvailableBlocks() * (fs.getBlockSize() / kb);
 		
-//		mStorageLabel.setText(String.format("sdcard: Total %.2f GB " +
-//							  "\t\tAvailable %.2f GB",
-//							  (double)total / (kb * kb), (double)aval / (kb * kb)));
+		mStorageLabel.setText(String.format("sdcard: Total %.2f GB " +
+							  "\t\tAvailable %.2f GB",
+							  (double)total / (kb * kb), (double)aval / (kb * kb)));
 	}
 	
 	/**
@@ -594,12 +565,7 @@ public final class Main extends ListActivity {
    public boolean onKeyDown(int keycode, KeyEvent event) {
     	String current = mFileMag.getCurrentDir();
     	
-    	if(keycode == KeyEvent.KEYCODE_SEARCH) {
-    		showDialog(SEARCH_B);
-    		
-    		return true;
-    		
-    	} else if(keycode == KeyEvent.KEYCODE_BACK && mUseBackKey && !current.equals("/")) {
+    	if(keycode == KeyEvent.KEYCODE_BACK && mUseBackKey && !current.equals("/")) {
 			//stop updating thumbnail icons if its running
 			mHandler.stopThumbnailThread();
 			mHandler.updateDirectory(mFileMag.getPreviousDir());
