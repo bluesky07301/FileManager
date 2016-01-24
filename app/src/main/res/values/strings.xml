@@ -2,4 +2,14 @@
 <resources>
     <string name="app_name">File Manager</string>
     <string name="memory_info">Memory Info</string>
+    <string name="internal_stroage">Internal Stroage Info.</string>
+    <string name="total">Total Memory:</string>
+    <string name="free">Free Memory:</string>
+    <string name="used">Used Memory:</string>
+
+    <string name="ram_stroage">RAM Stroage Info.</string>
+    <string name="ram_total">Total RAM:</string>
+    <string name="ram_free">Free RAM:</string>
+    <string name="ram_used">Used RAM:</string>
+
 </resources>

@@ -59,8 +59,7 @@ public final class Main extends ListActivity {
 	private static final String PREFS_COLOR = "color";
 	private static final String PREFS_THUMBNAIL = "thumbnail";
 	private static final String PREFS_SORT = "sort";
-	private static final String PREFS_STORAGE = "sdcard space";
-	
+
 	private static final int D_MENU_RENAME = 0x06;			//context menu id
 	private static final int F_MENU_RENAME = 0x0b;			//context menu id
 	private static final int F_MENU_ATTACH = 0x0c;			//context menu id
@@ -73,7 +72,7 @@ public final class Main extends ListActivity {
 	private boolean mReturnIntent = false;
 	private boolean mUseBackKey = true;
 	private String mSelectedListItem;				//item from context menu
-	private TextView  mPathLabel, mStorageLabel;
+	private TextView  mPathLabel;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,12 +109,9 @@ public final class Main extends ListActivity {
         /* register context menu for our list view */
         registerForContextMenu(getListView());
         
-//        mStorageLabel = (TextView)findViewById(R.id.storage_label);
         mPathLabel = (TextView)findViewById(R.id.path_label);
         mPathLabel.setText("path: /sdcard");
         
-//        updateStorageLabel();
-
         mHandler.setUpdateLabels(mPathLabel);
         
         /* setup buttons */
@@ -167,21 +163,6 @@ public final class Main extends ListActivity {
 		setResult(RESULT_OK, ret);
 		
 		finish();
-	}
-	
-	private void updateStorageLabel() {
-		long total, aval;
-		int kb = 1024;
-		
-		StatFs fs = new StatFs(Environment.
-								getExternalStorageDirectory().getPath());
-		
-		total = fs.getBlockCount() * (fs.getBlockSize() / kb);
-		aval = fs.getAvailableBlocks() * (fs.getBlockSize() / kb);
-		
-		mStorageLabel.setText(String.format("sdcard: Total %.2f GB " +
-							  "\t\tAvailable %.2f GB",
-							  (double)total / (kb * kb), (double)aval / (kb * kb)));
 	}
 	
 	/**
