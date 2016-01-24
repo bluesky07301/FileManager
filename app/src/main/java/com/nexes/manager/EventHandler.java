@@ -4,29 +4,20 @@ package com.nexes.manager;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class EventHandler implements OnClickListener {
 	/*
@@ -142,6 +133,7 @@ public class EventHandler implements OnClickListener {
 				if (mFileMang.getCurrentDir() != "/") {
 					stopThumbnailThread();
 					updateDirectory(mFileMang.getPreviousDir());
+					Main._inst.updateView();
 					if(mPathLabel != null)
 						mPathLabel.setText(mFileMang.getCurrentDir());
 				}
@@ -149,7 +141,8 @@ public class EventHandler implements OnClickListener {
 			
 			case R.id.home_button:
 				stopThumbnailThread();
-				updateDirectory(mFileMang.setHomeDir("/sdcard"));
+				updateDirectory(mFileMang.setHomeDir(Environment.getExternalStorageDirectory().getPath()));
+				Main._inst.updateView();
 				if(mPathLabel != null)
 					mPathLabel.setText(mFileMang.getCurrentDir());
 				break;
@@ -183,6 +176,7 @@ public class EventHandler implements OnClickListener {
 	 * @param content	an ArrayList of the file/folders in the current directory.
 	 */
 	public void updateDirectory(ArrayList<String> content) {
+
 		if(!mDataSource.isEmpty())
 			mDataSource.clear();
 		

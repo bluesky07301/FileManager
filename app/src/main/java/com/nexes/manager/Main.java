@@ -29,22 +29,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.StatFs;
-import android.os.Environment;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.Toast;
@@ -73,6 +71,8 @@ public final class Main extends ListActivity {
 	private boolean mUseBackKey = true;
 	private String mSelectedListItem;				//item from context menu
 	private TextView  mPathLabel;
+
+	static Main _inst;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,7 @@ public final class Main extends ListActivity {
         registerForContextMenu(getListView());
         
         mPathLabel = (TextView)findViewById(R.id.path_label);
-        mPathLabel.setText("path: /sdcard");
+        mPathLabel.setText(Environment.getExternalStorageDirectory().getPath());
         
         mHandler.setUpdateLabels(mPathLabel);
         
@@ -135,13 +135,15 @@ public final class Main extends ListActivity {
         Intent intent = getIntent();
         
         if(intent.getAction().equals(Intent.ACTION_GET_CONTENT)) {
-        	mReturnIntent = true;
+			mReturnIntent = true;
         
         } else if (intent.getAction().equals(ACTION_WIDGET)) {
-        	Log.e("MAIN", "Widget action, string = " + intent.getExtras().getString("folder"));
+			Log.e("MAIN", "Widget action, string = " + intent.getExtras().getString("folder"));
         	mHandler.updateDirectory(mFileMag.getNextDir(intent.getExtras().getString("folder"), true));
-        	
+
         }
+
+		_inst = this;
     }
 
 	@Override
@@ -164,7 +166,22 @@ public final class Main extends ListActivity {
 		
 		finish();
 	}
-	
+
+	public void updateView () {
+
+		GridView gridView = (GridView)findViewById(R.id.grid);
+		ListView listView = (ListView)findViewById(android.R.id.list);
+
+		if (mFileMag.getCurrentDir().equalsIgnoreCase(Environment.getExternalStorageDirectory().getPath()) || mFileMag.getCurrentDir().equalsIgnoreCase("/sdcard")) {
+			gridView.setVisibility(View.VISIBLE);
+			listView.setVisibility(View.INVISIBLE);
+		} else {
+			gridView.setVisibility(View.INVISIBLE);
+			listView.setVisibility(View.VISIBLE);
+		}
+
+	}
+
 	/**
 	 *  To add more functionality and let the user interact with more
 	 *  file types, this is the function to add the ability. 
@@ -188,6 +205,7 @@ public final class Main extends ListActivity {
 			if(file.canRead()) {
 				mHandler.stopThumbnailThread();
 				mHandler.updateDirectory(mFileMag.getNextDir(item, false));
+				updateView();
 				mPathLabel.setText(mFileMag.getCurrentDir());
 
 				/*set back button switch to true
@@ -469,6 +487,7 @@ public final class Main extends ListActivity {
 			//stop updating thumbnail icons if its running
 			mHandler.stopThumbnailThread();
 			mHandler.updateDirectory(mFileMag.getPreviousDir());
+			updateView();
 			mPathLabel.setText(mFileMag.getCurrentDir());
     		return true;
     		
