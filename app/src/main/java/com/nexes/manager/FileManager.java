@@ -23,17 +23,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Stack;
 import java.io.File;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
-import android.util.Log;
 
 /**
  * This class is completely modular, which is to say that it has
@@ -50,7 +39,6 @@ import android.util.Log;
  *
  */
 public class FileManager {
-	private static final int BUFFER = 		2048;
 	private static final int SORT_NONE = 	0;
 	private static final int SORT_ALPHA = 	1;
 	private static final int SORT_TYPE = 	2;
@@ -58,7 +46,6 @@ public class FileManager {
 	
 	private boolean mShowHiddenFiles = true;
 	private int mSortType = SORT_ALPHA;
-	private long mDirSize = 0;
 	private Stack<String> mPathStack;
 	private ArrayList<String> mDirContent;
 	

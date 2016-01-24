@@ -60,19 +60,9 @@ public final class Main extends ListActivity {
 	private static final String PREFS_SORT = "sort";
 	private static final String PREFS_STORAGE = "sdcard space";
 	
-	private static final int D_MENU_DELETE = 0x05;			//context menu id
 	private static final int D_MENU_RENAME = 0x06;			//context menu id
-	private static final int D_MENU_COPY =   0x07;			//context menu id
-	private static final int D_MENU_PASTE =  0x08;			//context menu id
-	private static final int D_MENU_ZIP = 	 0x0e;			//context menu id
-	private static final int D_MENU_UNZIP =  0x0f;			//context menu id
-	private static final int D_MENU_MOVE = 	 0x30;			//context menu id
-	private static final int F_MENU_MOVE = 	 0x20;			//context menu id
-	private static final int F_MENU_DELETE = 0x0a;			//context menu id
 	private static final int F_MENU_RENAME = 0x0b;			//context menu id
 	private static final int F_MENU_ATTACH = 0x0c;			//context menu id
-	private static final int F_MENU_COPY =   0x0d;			//context menu id
-	private static final int SETTING_REQ = 	 0x10;			//request code for intent
 
 	private FileManager mFileMag;
 	private EventHandler mHandler;
@@ -80,8 +70,6 @@ public final class Main extends ListActivity {
 	
 	private SharedPreferences mSettings;
 	private boolean mReturnIntent = false;
-	private boolean mHoldingFile = false;
-	private boolean mHoldingZip = false;
 	private boolean mUseBackKey = true;
 	private String mSelectedListItem;				//item from context menu
 	private TextView  mPathLabel, mStorageLabel;
@@ -97,7 +85,7 @@ public final class Main extends ListActivity {
         boolean hide = mSettings.getBoolean(PREFS_HIDDEN, true);
         boolean thumb = mSettings.getBoolean(PREFS_THUMBNAIL, true);
         int color = mSettings.getInt(PREFS_COLOR, -1);
-        int sort = mSettings.getInt(PREFS_SORT, 3);
+        int sort = mSettings.getInt(PREFS_SORT, 2);
         
         mFileMag = new FileManager();
         mFileMag.setShowHiddenFiles(hide);
