@@ -182,7 +182,7 @@ public class EventHandler implements OnClickListener {
 	 * 
 	 * @param content	an ArrayList of the file/folders in the current directory.
 	 */
-	public void updateDirectory(ArrayList<String> content) {	
+	public void updateDirectory(ArrayList<String> content) {
 		if(!mDataSource.isEmpty())
 			mDataSource.clear();
 		
@@ -219,9 +219,7 @@ public class EventHandler implements OnClickListener {
     	private final int MG = KB * KB;
     	private final int GB = MG * KB;    	
     	private String display_size;
-    	private ArrayList<Integer> positions;
-    	private LinearLayout hidden_layout;
-    	
+
     	public TableRow() {
     		super(mContext, R.layout.tablerow, mDataSource);    		
     	}
@@ -241,7 +239,7 @@ public class EventHandler implements OnClickListener {
     	
     	@Override
     	public View getView(int position, View convertView, ViewGroup parent) {
-        	final ViewHolder mViewHolder;
+			final ViewHolder mViewHolder;
     		int num_items = 0;
     		String temp = mFileMang.getCurrentDir();
     		File file = new File(temp + "/" + mDataSource.get(position));
