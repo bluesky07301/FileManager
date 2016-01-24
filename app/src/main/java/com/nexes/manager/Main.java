@@ -150,7 +150,6 @@ public final class Main extends ListActivity {
         Intent intent = getIntent();
         
         if(intent.getAction().equals(Intent.ACTION_GET_CONTENT)) {
-        	bimg[5].setVisibility(View.GONE);
         	mReturnIntent = true;
         
         } else if (intent.getAction().equals(ACTION_WIDGET)) {
@@ -205,7 +204,6 @@ public final class Main extends ListActivity {
     @Override
     public void onListItemClick(ListView parent, View view, int position, long id) {
     	final String item = mHandler.getData(position);
-    	boolean multiSelect = mHandler.isMultiSelected();
     	File file = new File(mFileMag.getCurrentDir() + "/" + item);
     	String item_ext = null;
     	
@@ -216,268 +214,215 @@ public final class Main extends ListActivity {
     		item_ext = ""; 
     	}
     	
-    	/*
-    	 * If the user has multi-select on, we just need to record the file
-    	 * not make an intent for it.
-    	 */
-    	if(multiSelect) {
-    		mTable.addMultiPosition(position, file.getPath());
-    		
-    	} else {
-	    	if (file.isDirectory()) {
-				if(file.canRead()) {
-					mHandler.stopThumbnailThread();
-		    		mHandler.updateDirectory(mFileMag.getNextDir(item, false));
-		    		mPathLabel.setText(mFileMag.getCurrentDir());
-		    		
-		    		/*set back button switch to true 
-		    		 * (this will be better implemented later)
-		    		 */
-		    		if(!mUseBackKey)
-		    			mUseBackKey = true;
-		    		
-	    		} else {
-	    			Toast.makeText(this, "Can't read folder due to permissions", 
-	    							Toast.LENGTH_SHORT).show();
-	    		}
-	    	}
-	    	
-	    	/*music file selected--add more audio formats*/
-	    	else if (item_ext.equalsIgnoreCase(".mp3") || 
-	    			 item_ext.equalsIgnoreCase(".m4a")||
-	    			 item_ext.equalsIgnoreCase(".mp4")) {
-	    		
-	    		if(mReturnIntent) {
-	    			returnIntentResults(file);
-	    		} else {
-	    			Intent i = new Intent();
-    				i.setAction(android.content.Intent.ACTION_VIEW);
-    				i.setDataAndType(Uri.fromFile(file), "audio/*");
-    				startActivity(i);
-	    		}
-	    	}
-	    	
-	    	/*photo file selected*/
-	    	else if(item_ext.equalsIgnoreCase(".jpeg") || 
-	    			item_ext.equalsIgnoreCase(".jpg")  ||
-	    			item_ext.equalsIgnoreCase(".png")  ||
-	    			item_ext.equalsIgnoreCase(".gif")  || 
-	    			item_ext.equalsIgnoreCase(".tiff")) {
-	 			    		
-	    		if (file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-			    		Intent picIntent = new Intent();
-			    		picIntent.setAction(android.content.Intent.ACTION_VIEW);
-			    		picIntent.setDataAndType(Uri.fromFile(file), "image/*");
-			    		startActivity(picIntent);
-	    			}
-	    		}
-	    	}
-	    	
-	    	/*video file selected--add more video formats*/
-	    	else if(item_ext.equalsIgnoreCase(".m4v") || 
-	    			item_ext.equalsIgnoreCase(".3gp") ||
-	    			item_ext.equalsIgnoreCase(".wmv") || 
-	    			item_ext.equalsIgnoreCase(".mp4") || 
-	    			item_ext.equalsIgnoreCase(".ogg") ||
-	    			item_ext.equalsIgnoreCase(".wav")) {
-	    		
-	    		if (file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-	    				Intent movieIntent = new Intent();
-			    		movieIntent.setAction(android.content.Intent.ACTION_VIEW);
-			    		movieIntent.setDataAndType(Uri.fromFile(file), "video/*");
-			    		startActivity(movieIntent);
-	    			}
-	    		}
-	    	}
-	    	
-	    	/* gzip files, this will be implemented later */
-	    	else if(item_ext.equalsIgnoreCase(".gzip") ||
-	    			item_ext.equalsIgnoreCase(".gz")) {
-	    		
-	    		if(mReturnIntent) {
-	    			returnIntentResults(file);
-	    			
-	    		} else {
-	    			//TODO:
-	    		}
-	    	}
-	    	
-	    	/*pdf file selected*/
-	    	else if(item_ext.equalsIgnoreCase(".pdf")) {
-	    		
-	    		if(file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-			    		Intent pdfIntent = new Intent();
-			    		pdfIntent.setAction(android.content.Intent.ACTION_VIEW);
-			    		pdfIntent.setDataAndType(Uri.fromFile(file), 
-			    								 "application/pdf");
-			    		
-			    		try {
-			    			startActivity(pdfIntent);
-			    		} catch (ActivityNotFoundException e) {
-			    			Toast.makeText(this, "Sorry, couldn't find a pdf viewer", 
-									Toast.LENGTH_SHORT).show();
-			    		}
-		    		}
-	    		}
-	    	}
-	    	
-	    	/*Android application file*/
-	    	else if(item_ext.equalsIgnoreCase(".apk")){
-	    		
-	    		if(file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-		    			Intent apkIntent = new Intent();
-		    			apkIntent.setAction(android.content.Intent.ACTION_VIEW);
-		    			apkIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-		    			startActivity(apkIntent);
-	    			}
-	    		}
-	    	}
-	    	
-	    	/* HTML file */
-	    	else if(item_ext.equalsIgnoreCase(".html")) {
-	    		
-	    		if(file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-		    			Intent htmlIntent = new Intent();
-		    			htmlIntent.setAction(android.content.Intent.ACTION_VIEW);
-		    			htmlIntent.setDataAndType(Uri.fromFile(file), "text/html");
-		    			
-		    			try {
-		    				startActivity(htmlIntent);
-		    			} catch(ActivityNotFoundException e) {
-		    				Toast.makeText(this, "Sorry, couldn't find a HTML viewer", 
-		    									Toast.LENGTH_SHORT).show();
-		    			}
-	    			}
-	    		}
-	    	}
-	    	
-	    	/* text file*/
-	    	else if(item_ext.equalsIgnoreCase(".txt")) {
-	    		
-	    		if(file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-		    			Intent txtIntent = new Intent();
-		    			txtIntent.setAction(android.content.Intent.ACTION_VIEW);
-		    			txtIntent.setDataAndType(Uri.fromFile(file), "text/plain");
-		    			
-		    			try {
-		    				startActivity(txtIntent);
-		    			} catch(ActivityNotFoundException e) {
-		    				txtIntent.setType("text/*");
-		    				startActivity(txtIntent);
-		    			}
-	    			}
-	    		}
-	    	}
-	    	
-	    	/* generic intent */
-	    	else {
-	    		if(file.exists()) {
-	    			if(mReturnIntent) {
-	    				returnIntentResults(file);
-	    				
-	    			} else {
-			    		Intent generic = new Intent();
-			    		generic.setAction(android.content.Intent.ACTION_VIEW);
-			    		generic.setDataAndType(Uri.fromFile(file), "text/plain");
-			    		
-			    		try {
-			    			startActivity(generic);
-			    		} catch(ActivityNotFoundException e) {
-			    			Toast.makeText(this, "Sorry, couldn't find anything " +
-			    						   "to open " + file.getName(), 
-			    						   Toast.LENGTH_SHORT).show();
-			    		}
-	    			}
-	    		}
-	    	}
-    	}
-	}
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	super.onActivityResult(requestCode, resultCode, data);
-    	
-    	SharedPreferences.Editor editor = mSettings.edit();
-    	boolean check;
-    	boolean thumbnail;
-    	int color, sort;
-    	
-    	/* resultCode must equal RESULT_CANCELED because the only way
-    	 * out of that activity is pressing the back button on the phone
-    	 * this publishes a canceled result code not an ok result code
-    	 */
-    	if(requestCode == SETTING_REQ && resultCode == RESULT_CANCELED) {
-    		//save the information we get from settings activity
-    		check = data.getBooleanExtra("HIDDEN", false);
-    		thumbnail = data.getBooleanExtra("THUMBNAIL", true);
-    		color = data.getIntExtra("COLOR", -1);
-    		sort = data.getIntExtra("SORT", 0);
+		if (file.isDirectory()) {
+			if(file.canRead()) {
+				mHandler.stopThumbnailThread();
+				mHandler.updateDirectory(mFileMag.getNextDir(item, false));
+				mPathLabel.setText(mFileMag.getCurrentDir());
 
-    		editor.putBoolean(PREFS_HIDDEN, check);
-    		editor.putBoolean(PREFS_THUMBNAIL, thumbnail);
-    		editor.putInt(PREFS_COLOR, color);
-    		editor.putInt(PREFS_SORT, sort);
-    		editor.commit();
-    		  		
-    		mFileMag.setShowHiddenFiles(check);
-    		mFileMag.setSortType(sort);
-    		mHandler.setTextColor(color);
-    		mHandler.setShowThumbnails(thumbnail);
-    		mHandler.updateDirectory(mFileMag.getNextDir(mFileMag.getCurrentDir(), true));
-    	}
-    }
+				/*set back button switch to true
+				 * (this will be better implemented later)
+				 */
+				if(!mUseBackKey)
+					mUseBackKey = true;
+
+			} else {
+				Toast.makeText(this, "Can't read folder due to permissions",
+								Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		/*music file selected--add more audio formats*/
+		else if (item_ext.equalsIgnoreCase(".mp3") ||
+				 item_ext.equalsIgnoreCase(".m4a")||
+				 item_ext.equalsIgnoreCase(".mp4")) {
+
+			if(mReturnIntent) {
+				returnIntentResults(file);
+			} else {
+				Intent i = new Intent();
+				i.setAction(android.content.Intent.ACTION_VIEW);
+				i.setDataAndType(Uri.fromFile(file), "audio/*");
+				startActivity(i);
+			}
+		}
+
+		/*photo file selected*/
+		else if(item_ext.equalsIgnoreCase(".jpeg") ||
+				item_ext.equalsIgnoreCase(".jpg")  ||
+				item_ext.equalsIgnoreCase(".png")  ||
+				item_ext.equalsIgnoreCase(".gif")  ||
+				item_ext.equalsIgnoreCase(".tiff")) {
+
+			if (file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent picIntent = new Intent();
+					picIntent.setAction(android.content.Intent.ACTION_VIEW);
+					picIntent.setDataAndType(Uri.fromFile(file), "image/*");
+					startActivity(picIntent);
+				}
+			}
+		}
+
+		/*video file selected--add more video formats*/
+		else if(item_ext.equalsIgnoreCase(".m4v") ||
+				item_ext.equalsIgnoreCase(".3gp") ||
+				item_ext.equalsIgnoreCase(".wmv") ||
+				item_ext.equalsIgnoreCase(".mp4") ||
+				item_ext.equalsIgnoreCase(".ogg") ||
+				item_ext.equalsIgnoreCase(".wav")) {
+
+			if (file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent movieIntent = new Intent();
+					movieIntent.setAction(android.content.Intent.ACTION_VIEW);
+					movieIntent.setDataAndType(Uri.fromFile(file), "video/*");
+					startActivity(movieIntent);
+				}
+			}
+		}
+
+		/* gzip files, this will be implemented later */
+		else if(item_ext.equalsIgnoreCase(".gzip") ||
+				item_ext.equalsIgnoreCase(".gz")) {
+
+			if(mReturnIntent) {
+				returnIntentResults(file);
+
+			} else {
+				//TODO:
+			}
+		}
+
+		/*pdf file selected*/
+		else if(item_ext.equalsIgnoreCase(".pdf")) {
+
+			if(file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent pdfIntent = new Intent();
+					pdfIntent.setAction(android.content.Intent.ACTION_VIEW);
+					pdfIntent.setDataAndType(Uri.fromFile(file),
+											 "application/pdf");
+
+					try {
+						startActivity(pdfIntent);
+					} catch (ActivityNotFoundException e) {
+						Toast.makeText(this, "Sorry, couldn't find a pdf viewer",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
+
+		/*Android application file*/
+		else if(item_ext.equalsIgnoreCase(".apk")){
+
+			if(file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent apkIntent = new Intent();
+					apkIntent.setAction(android.content.Intent.ACTION_VIEW);
+					apkIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+					startActivity(apkIntent);
+				}
+			}
+		}
+
+		/* HTML file */
+		else if(item_ext.equalsIgnoreCase(".html")) {
+
+			if(file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent htmlIntent = new Intent();
+					htmlIntent.setAction(android.content.Intent.ACTION_VIEW);
+					htmlIntent.setDataAndType(Uri.fromFile(file), "text/html");
+
+					try {
+						startActivity(htmlIntent);
+					} catch(ActivityNotFoundException e) {
+						Toast.makeText(this, "Sorry, couldn't find a HTML viewer",
+											Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
+
+		/* text file*/
+		else if(item_ext.equalsIgnoreCase(".txt")) {
+
+			if(file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent txtIntent = new Intent();
+					txtIntent.setAction(android.content.Intent.ACTION_VIEW);
+					txtIntent.setDataAndType(Uri.fromFile(file), "text/plain");
+
+					try {
+						startActivity(txtIntent);
+					} catch(ActivityNotFoundException e) {
+						txtIntent.setType("text/*");
+						startActivity(txtIntent);
+					}
+				}
+			}
+		}
+
+		/* generic intent */
+		else {
+			if(file.exists()) {
+				if(mReturnIntent) {
+					returnIntentResults(file);
+
+				} else {
+					Intent generic = new Intent();
+					generic.setAction(android.content.Intent.ACTION_VIEW);
+					generic.setDataAndType(Uri.fromFile(file), "text/plain");
+
+					try {
+						startActivity(generic);
+					} catch(ActivityNotFoundException e) {
+						Toast.makeText(this, "Sorry, couldn't find anything " +
+									   "to open " + file.getName(),
+									   Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
+
+	}
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
     	super.onCreateContextMenu(menu, v, info);
     	
-    	boolean multi_data = mHandler.hasMultiSelectData();
     	AdapterContextMenuInfo _info = (AdapterContextMenuInfo)info;
     	mSelectedListItem = mHandler.getData(_info.position);
 
     	/* is it a directory and is multi-select turned off */
-    	if(mFileMag.isDirectory(mSelectedListItem) && !mHandler.isMultiSelected()) {
+    	if(mFileMag.isDirectory(mSelectedListItem)) {
     		menu.setHeaderTitle("Folder operations");
-        	menu.add(0, D_MENU_DELETE, 0, "Delete Folder");
         	menu.add(0, D_MENU_RENAME, 0, "Rename Folder");
-        	menu.add(0, D_MENU_COPY, 0, "Copy Folder");
-        	menu.add(0, D_MENU_MOVE, 0, "Move(Cut) Folder");
-        	menu.add(0, D_MENU_ZIP, 0, "Zip Folder");
-        	menu.add(0, D_MENU_PASTE, 0, "Paste into folder").setEnabled(mHoldingFile || 
-        																 multi_data);
-        	menu.add(0, D_MENU_UNZIP, 0, "Extract here").setEnabled(mHoldingZip);
-    		
+
         /* is it a file and is multi-select turned off */
-    	} else if(!mFileMag.isDirectory(mSelectedListItem) && !mHandler.isMultiSelected()) {
+    	} else if(!mFileMag.isDirectory(mSelectedListItem)) {
         	menu.setHeaderTitle("File Operations");
-    		menu.add(0, F_MENU_DELETE, 0, "Delete File");
     		menu.add(0, F_MENU_RENAME, 0, "Rename File");
-    		menu.add(0, F_MENU_COPY, 0, "Copy File");
-    		menu.add(0, F_MENU_MOVE, 0, "Move(Cut) File");
     		menu.add(0, F_MENU_ATTACH, 0, "Email File");
     	}	
     }
@@ -486,16 +431,12 @@ public final class Main extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
     	switch(item.getItemId()) {
-    		case D_MENU_RENAME:
-    			showDialog(D_MENU_RENAME);
-    			return true;
-    			
     		case F_MENU_RENAME:
-    			showDialog(F_MENU_RENAME);
+				showDialog(F_MENU_RENAME);
     			return true;
     			
     		case F_MENU_ATTACH:
-    			File file = new File(mFileMag.getCurrentDir() +"/"+ mSelectedListItem);
+				File file = new File(mFileMag.getCurrentDir() +"/"+ mSelectedListItem);
     			Intent mail_int = new Intent();
     			
     			mail_int.setAction(android.content.Intent.ACTION_SEND);

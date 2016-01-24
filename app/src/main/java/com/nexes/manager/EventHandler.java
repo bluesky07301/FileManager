@@ -1,20 +1,3 @@
-/*
-    Open Manager, an open source file manager for the Android system
-    Copyright (C) 2009, 2010, 2011  Joe Berria <nexesdevelopment@gmail.com>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 
 package com.nexes.manager;
 
@@ -45,49 +28,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * This class sits between the Main activity and the FileManager class. 
- * To keep the FileManager class modular, this class exists to handle 
- * UI events and communicate that information to the FileManger class
- * 
- * This class is responsible for the buttons onClick method. If one needs
- * to change the functionality of the buttons found from the Main activity
- * or add button logic, this is the class that will need to be edited.
- * 
- * This class is responsible for handling the information that is displayed
- * from the list view (the files and folder) with a a nested class TableRow.
- * The TableRow class is responsible for displaying which icon is shown for each
- * entry. For example a folder will display the folder icon, a Word doc will 
- * display a word icon and so on. If more icons are to be added, the TableRow 
- * class must be updated to display those changes. 
- * 
- * @author Joe Berria
- */
 public class EventHandler implements OnClickListener {
 	/*
 	 * Unique types to control which file operation gets
 	 * performed in the background
 	 */
-    private static final int SEARCH_TYPE =		0x00;
-	private static final int COPY_TYPE =		0x01;
-	private static final int UNZIP_TYPE =		0x02;
-	private static final int UNZIPTO_TYPE =		0x03;
-	private static final int ZIP_TYPE =			0x04;
-	private static final int DELETE_TYPE = 		0x05;
-	private static final int MANAGE_DIALOG =	 0x06;
-	
-	private final Context mContext;
+    private final Context mContext;
 	private final FileManager mFileMang;
 	private ThumbnailCreator mThumbnail;
 	private TableRow mDelegate;
 	
-	private boolean multi_select_flag = false;
-	private boolean delete_after_copy = false;
+	//private boolean multi_select_flag = false;
 	private boolean thumbnail_flag = true;
 	private int mColor = Color.WHITE;
 	
 	//the list used to feed info into the array adapter and when multi-select is on
-	private ArrayList<String> mDataSource, mMultiSelectData;
+	private ArrayList<String> mDataSource;
 	private TextView mPathLabel;
 
 	
@@ -160,37 +116,6 @@ public class EventHandler implements OnClickListener {
 	 */
 	public void setShowThumbnails(boolean show) {
 		thumbnail_flag = show;
-	}
-	
-	/**
-	 * If you want to move a file (cut/paste) and not just copy/paste use this method to 
-	 * tell the file manager to delete the old reference of the file.
-	 * 
-	 * @param delete true if you want to move a file, false to copy the file
-	 */
-	public void setDeleteAfterCopy(boolean delete) {
-		delete_after_copy = delete;
-	}
-	
-	/**
-	 * Indicates whether the user wants to select 
-	 * multiple files or folders at a time.
-	 * <br><br>
-	 * false by default
-	 * 
-	 * @return	true if the user has turned on multi selection
-	 */
-	public boolean isMultiSelected() {
-		return multi_select_flag;
-	}
-	
-	/**
-	 * Use this method to determine if the user has selected multiple files/folders
-	 * 
-	 * @return	returns true if the user is holding multiple objects (multi-select)
-	 */
-	public boolean hasMultiSelectData() {
-		return (mMultiSelectData != null && mMultiSelectData.size() > 0);
 	}
 	
 	/**
@@ -302,28 +227,6 @@ public class EventHandler implements OnClickListener {
     		super(mContext, R.layout.tablerow, mDataSource);    		
     	}
     	
-    	public void addMultiPosition(int index, String path) {
-    		if(positions == null)
-    			positions = new ArrayList<Integer>();
-    		
-    		if(mMultiSelectData == null) {
-    			positions.add(index);
-    			add_multiSelect_file(path);
-    			
-    		} else if(mMultiSelectData.contains(path)) {
-    			if(positions.contains(index))
-    				positions.remove(new Integer(index));
-    			
-    			mMultiSelectData.remove(path);
-    			
-    		} else {
-    			positions.add(index);
-    			add_multiSelect_file(path);
-    		}
-    		
-    		notifyDataSetChanged();
-    	}
-
     	public String getFilePermissions(File file) {
     		String per = "-";
     	    		
@@ -498,13 +401,7 @@ public class EventHandler implements OnClickListener {
     		
     		return convertView;
     	}
-    	
-    	private void add_multiSelect_file(String src) {
-    		if(mMultiSelectData == null)
-    			mMultiSelectData = new ArrayList<String>();
-    		
-    		mMultiSelectData.add(src);
-    	}
+
     }
 
 }
