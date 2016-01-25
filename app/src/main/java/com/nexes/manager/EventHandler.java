@@ -28,7 +28,8 @@ public class EventHandler implements OnClickListener {
 	private final FileManager mFileMang;
 	private ThumbnailCreator mThumbnail;
 	private TableRow mDelegate;
-	
+	private GridRow mGridDelegate;
+
 	//private boolean multi_select_flag = false;
 	private boolean thumbnail_flag = true;
 	private int mColor = Color.WHITE;
@@ -78,7 +79,11 @@ public class EventHandler implements OnClickListener {
 	public void setListAdapter(TableRow adapter) {
 		mDelegate = adapter;
 	}
-	
+
+    public void setGridListAdapter(GridRow adapter) {
+        mGridDelegate = adapter;
+    }
+
 	/**
 	 * This method is called from the Main activity and is passed
 	 * the TextView that should be updated as the directory changes
@@ -134,8 +139,9 @@ public class EventHandler implements OnClickListener {
 					stopThumbnailThread();
 					updateDirectory(mFileMang.getPreviousDir());
 					Main._inst.updateView();
-					if(mPathLabel != null)
-						mPathLabel.setText(mFileMang.getCurrentDir());
+                    if(mPathLabel != null)
+                        mPathLabel.setText(mFileMang.getCurrentDir());
+
 				}
 				break;
 			
@@ -143,8 +149,9 @@ public class EventHandler implements OnClickListener {
 				stopThumbnailThread();
 				updateDirectory(mFileMang.setHomeDir(Environment.getExternalStorageDirectory().getPath()));
 				Main._inst.updateView();
-				if(mPathLabel != null)
-					mPathLabel.setText(mFileMang.getCurrentDir());
+                if(mPathLabel != null)
+                    mPathLabel.setText(mFileMang.getCurrentDir());
+
 				break;
 				
 			case R.id.memory_button:
@@ -184,6 +191,7 @@ public class EventHandler implements OnClickListener {
 			mDataSource.add(data);
 		
 		mDelegate.notifyDataSetChanged();
+        mGridDelegate.notifyDataSetChanged();
 	}
 
 	/**
@@ -199,14 +207,19 @@ public class EventHandler implements OnClickListener {
 		ImageView icon;
 	}
 
-	
-	/**
+    private static class GridViewHolder {
+        TextView name;
+        ImageView icon;
+    }
+
+
+
+    /**
 	 * A nested class to handle displaying a custom view in the ListView that
 	 * is used in the Main activity. If any icons are to be added, they must
 	 * be implemented in the getView method. This class is instantiated once in Main
 	 * and has no reason to be instantiated again. 
 	 * 
-	 * @author Joe Berria
 	 */
     public class TableRow extends ArrayAdapter<String> {
     	private final int KB = 1024;
@@ -217,7 +230,7 @@ public class EventHandler implements OnClickListener {
     	public TableRow() {
     		super(mContext, R.layout.tablerow, mDataSource);    		
     	}
-    	
+
     	public String getFilePermissions(File file) {
     		String per = "-";
     	    		
@@ -392,6 +405,143 @@ public class EventHandler implements OnClickListener {
     		
     		return convertView;
     	}
+
+    }
+
+
+    public class GridRow extends ArrayAdapter<String> {
+
+        public GridRow() {
+            super(mContext, R.layout.grid_item, mDataSource);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final GridViewHolder mViewHolder;
+            String temp = mFileMang.getCurrentDir();
+            File file = new File(temp + "/" + mDataSource.get(position));
+
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext.
+                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.grid_item, parent, false);
+
+                mViewHolder = new GridViewHolder();
+                mViewHolder.name = (TextView)convertView.findViewById(R.id.name);
+                mViewHolder.icon = (ImageView)convertView.findViewById(R.id.image);
+
+                convertView.setTag(mViewHolder);
+
+            } else {
+                mViewHolder = (GridViewHolder)convertView.getTag();
+            }
+
+            if(mThumbnail == null)
+                mThumbnail = new ThumbnailCreator(-1, -1);
+
+            if(file != null && file.isFile()) {
+                String ext = file.toString();
+                String sub_ext = ext.substring(ext.lastIndexOf(".") + 1);
+
+    			/* This series of else if statements will determine which
+    			 * icon is displayed
+    			 */
+                if (sub_ext.equalsIgnoreCase("pdf")) {
+                    mViewHolder.icon.setImageResource(R.drawable.pdf);
+
+                } else if (sub_ext.equalsIgnoreCase("mp3") ||
+                        sub_ext.equalsIgnoreCase("wma") ||
+                        sub_ext.equalsIgnoreCase("m4a") ||
+                        sub_ext.equalsIgnoreCase("m4p")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.music);
+
+                } else if (sub_ext.equalsIgnoreCase("png") ||
+                        sub_ext.equalsIgnoreCase("jpg") ||
+                        sub_ext.equalsIgnoreCase("jpeg")||
+                        sub_ext.equalsIgnoreCase("gif") ||
+                        sub_ext.equalsIgnoreCase("tiff")) {
+
+                    if(thumbnail_flag && file.length() != 0) {
+                        Bitmap thumb = mThumbnail.isBitmapCached(file.getPath());
+
+                        if (thumb == null) {
+                            final Handler handle = new Handler(new Handler.Callback() {
+                                public boolean handleMessage(Message msg) {
+                                    notifyDataSetChanged();
+
+                                    return true;
+                                }
+                            });
+
+                            mThumbnail.createNewThumbnail(mDataSource, mFileMang.getCurrentDir(), handle);
+
+                            if (!mThumbnail.isAlive())
+                                mThumbnail.start();
+
+                        } else {
+                            mViewHolder.icon.setImageBitmap(thumb);
+                        }
+
+                    } else {
+                        mViewHolder.icon.setImageResource(R.drawable.image);
+                    }
+
+                } else if (sub_ext.equalsIgnoreCase("zip")  ||
+                        sub_ext.equalsIgnoreCase("gzip") ||
+                        sub_ext.equalsIgnoreCase("gz")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.zip);
+
+                } else if(sub_ext.equalsIgnoreCase("m4v") ||
+                        sub_ext.equalsIgnoreCase("wmv") ||
+                        sub_ext.equalsIgnoreCase("3gp") ||
+                        sub_ext.equalsIgnoreCase("mp4")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.movies);
+
+                } else if(sub_ext.equalsIgnoreCase("doc") ||
+                        sub_ext.equalsIgnoreCase("docx")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.word);
+
+                } else if(sub_ext.equalsIgnoreCase("xls") ||
+                        sub_ext.equalsIgnoreCase("xlsx")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.excel);
+
+                } else if(sub_ext.equalsIgnoreCase("ppt") ||
+                        sub_ext.equalsIgnoreCase("pptx")) {
+
+                    mViewHolder.icon.setImageResource(R.drawable.ppt);
+
+                } else if(sub_ext.equalsIgnoreCase("html")) {
+                    mViewHolder.icon.setImageResource(R.drawable.html32);
+
+                } else if(sub_ext.equalsIgnoreCase("xml")) {
+                    mViewHolder.icon.setImageResource(R.drawable.xml32);
+
+                } else if(sub_ext.equalsIgnoreCase("conf")) {
+                    mViewHolder.icon.setImageResource(R.drawable.config32);
+
+                } else if(sub_ext.equalsIgnoreCase("apk")) {
+                    mViewHolder.icon.setImageResource(R.drawable.appicon);
+
+                } else if(sub_ext.equalsIgnoreCase("jar")) {
+                    mViewHolder.icon.setImageResource(R.drawable.jar32);
+
+                } else {
+                    mViewHolder.icon.setImageResource(R.drawable.text);
+                }
+
+            } else if (file != null && file.isDirectory()) {
+                mViewHolder.icon.setImageResource(R.drawable.icon);
+            }
+
+            mViewHolder.name.setText(file.getName());
+
+            return convertView;
+        }
 
     }
 

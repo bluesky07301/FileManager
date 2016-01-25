@@ -19,26 +19,34 @@
 package com.nexes.manager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.MenuItem;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -65,7 +73,8 @@ public final class Main extends ListActivity {
 	private FileManager mFileMag;
 	private EventHandler mHandler;
 	private EventHandler.TableRow mTable;
-	
+	private EventHandler.GridRow mGrid;
+
 	private SharedPreferences mSettings;
 	private boolean mReturnIntent = false;
 	private boolean mUseBackKey = true;
@@ -99,13 +108,19 @@ public final class Main extends ListActivity {
         mHandler.setTextColor(color);
         mHandler.setShowThumbnails(thumb);
         mTable = mHandler.new TableRow();
+        mGrid = mHandler.new GridRow();
         
         /*sets the ListAdapter for our ListActivity and
          *gives our EventHandler class the same adapter
          */
         mHandler.setListAdapter(mTable);
         setListAdapter(mTable);
-        
+
+        GridView imagegrid = (GridView) findViewById(R.id.grid);
+        imagegrid.setAdapter(mGrid);
+
+        mHandler.setGridListAdapter(mGrid);
+
         /* register context menu for our list view */
         registerForContextMenu(getListView());
         
@@ -175,10 +190,14 @@ public final class Main extends ListActivity {
 		if (mFileMag.getCurrentDir().equalsIgnoreCase(Environment.getExternalStorageDirectory().getPath()) || mFileMag.getCurrentDir().equalsIgnoreCase("/sdcard")) {
 			gridView.setVisibility(View.VISIBLE);
 			listView.setVisibility(View.INVISIBLE);
+
 		} else {
 			gridView.setVisibility(View.INVISIBLE);
 			listView.setVisibility(View.VISIBLE);
+
 		}
+
+
 
 	}
 
