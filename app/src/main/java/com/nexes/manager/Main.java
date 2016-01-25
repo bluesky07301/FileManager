@@ -49,6 +49,7 @@ import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -143,7 +144,7 @@ public final class Main extends ListActivity {
             }
         });
 
-        /* register context menu for our list view */
+	    /* register context menu for our list view */
         registerForContextMenu(getListView());
         
         mPathLabel = (TextView)findViewById(R.id.path_label);
@@ -211,7 +212,9 @@ public final class Main extends ListActivity {
 		GridView gridView = (GridView)findViewById(R.id.grid);
 		ListView listView = (ListView)findViewById(android.R.id.list);
 
-		if (mFileMag.getCurrentDir().equalsIgnoreCase(Environment.getExternalStorageDirectory().getPath()) || mFileMag.getCurrentDir().equalsIgnoreCase("/sdcard")) {
+		if (mFileMag.getCurrentDir().equalsIgnoreCase(Environment.getExternalStorageDirectory().getPath())
+                || mFileMag.getCurrentDir().equalsIgnoreCase("/sdcard")
+                || mFileMag.getCurrentDir().equalsIgnoreCase("/mnt/sdcard")) {
 			gridView.setVisibility(View.VISIBLE);
 			listView.setVisibility(View.INVISIBLE);
 
@@ -241,7 +244,7 @@ public final class Main extends ListActivity {
     	} catch(IndexOutOfBoundsException e) {	
     		item_ext = ""; 
     	}
-    	
+
 		if (file.isDirectory()) {
 			if(file.canRead()) {
 				mHandler.stopThumbnailThread();
