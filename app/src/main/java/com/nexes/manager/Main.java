@@ -67,7 +67,9 @@ public final class Main extends ListActivity {
 	private static final String PREFS_THUMBNAIL = "thumbnail";
 	private static final String PREFS_SORT = "sort";
 
+	private static final int D_MENU_OPEN = 0x05;			//context menu id
 	private static final int D_MENU_RENAME = 0x06;			//context menu id
+	private static final int F_MENU_OPEN = 0x0a;			//context menu id
 	private static final int F_MENU_RENAME = 0x0b;			//context menu id
 	private static final int F_MENU_ATTACH = 0x0c;			//context menu id
 
@@ -80,6 +82,7 @@ public final class Main extends ListActivity {
 	private boolean mReturnIntent = false;
 	private boolean mUseBackKey = true;
 	private String mSelectedListItem;				//item from context menu
+    private int mSelectedItem;
 	private TextView  mPathLabel;
 
 	static Main _inst;
@@ -117,15 +120,26 @@ public final class Main extends ListActivity {
         mHandler.setListAdapter(mTable);
         setListAdapter(mTable);
 
-        GridView imagegrid = (GridView) findViewById(R.id.grid);
+        final GridView imagegrid = (GridView) findViewById(R.id.grid);
         imagegrid.setAdapter(mGrid);
 
         mHandler.setGridListAdapter(mGrid);
+
+        registerForContextMenu(imagegrid);
 
         imagegrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 onListItemClick(null, v, position, id);
+            }
+        });
+
+        imagegrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedItem = position;
+                imagegrid.showContextMenu();
+                return true;
             }
         });
 
@@ -220,7 +234,7 @@ public final class Main extends ListActivity {
     	final String item = mHandler.getData(position);
     	File file = new File(mFileMag.getCurrentDir() + "/" + item);
     	String item_ext = null;
-    	
+
     	try {
     		item_ext = item.substring(item.lastIndexOf("."), item.length());
     		
@@ -424,19 +438,27 @@ public final class Main extends ListActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
-    	super.onCreateContextMenu(menu, v, info);
-    	
-    	AdapterContextMenuInfo _info = (AdapterContextMenuInfo)info;
-    	mSelectedListItem = mHandler.getData(_info.position);
+        super.onCreateContextMenu(menu, v, info);
+
+        if (info != null) {
+            AdapterContextMenuInfo _info = (AdapterContextMenuInfo) info;
+            mSelectedListItem = mHandler.getData(_info.position);
+            mSelectedItem = _info.position;
+        }
+        else {
+            mSelectedListItem = mHandler.getData(mSelectedItem);
+        }
 
     	/* is it a directory and is multi-select turned off */
     	if(mFileMag.isDirectory(mSelectedListItem)) {
     		menu.setHeaderTitle("Folder operations");
+            menu.add(0, D_MENU_OPEN, 0, "Open Folder");
         	menu.add(0, D_MENU_RENAME, 0, "Rename Folder");
 
         /* is it a file and is multi-select turned off */
     	} else if(!mFileMag.isDirectory(mSelectedListItem)) {
         	menu.setHeaderTitle("File Operations");
+            menu.add(0, F_MENU_OPEN, 0, "Open File");
     		menu.add(0, F_MENU_RENAME, 0, "Rename File");
     		menu.add(0, F_MENU_ATTACH, 0, "Email File");
     	}	
@@ -445,7 +467,216 @@ public final class Main extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
+        final String selItem = mHandler.getData(mSelectedItem);
+        File selFile = new File(mFileMag.getCurrentDir() + "/" + selItem);
+
     	switch(item.getItemId()) {
+
+            case D_MENU_OPEN:
+
+                if(selFile.canRead()) {
+                    mHandler.stopThumbnailThread();
+                    mHandler.updateDirectory(mFileMag.getNextDir(selItem, false));
+                    updateView();
+                    mPathLabel.setText(mFileMag.getCurrentDir());
+
+                    /*set back button switch to true
+                     * (this will be better implemented later)
+                     */
+                    if(!mUseBackKey)
+                        mUseBackKey = true;
+
+                } else {
+                    Toast.makeText(this, "Can't read folder due to permissions",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+
+            case F_MENU_OPEN:
+                String item_ext = null;
+
+                try {
+                    item_ext = selItem.substring(selItem.lastIndexOf("."), selItem.length());
+
+                } catch(IndexOutOfBoundsException e) {
+                    item_ext = "";
+                }
+
+                /*music file selected--add more audio formats*/
+                if (item_ext.equalsIgnoreCase(".mp3") ||
+                    item_ext.equalsIgnoreCase(".m4a")||
+                    item_ext.equalsIgnoreCase(".mp4")) {
+
+                    if(mReturnIntent) {
+                        returnIntentResults(selFile);
+                    } else {
+                        Intent i = new Intent();
+                        i.setAction(android.content.Intent.ACTION_VIEW);
+                        i.setDataAndType(Uri.fromFile(selFile), "audio/*");
+                        startActivity(i);
+                    }
+                }
+
+                /*photo file selected*/
+                else if(item_ext.equalsIgnoreCase(".jpeg") ||
+                        item_ext.equalsIgnoreCase(".jpg")  ||
+                        item_ext.equalsIgnoreCase(".png")  ||
+                        item_ext.equalsIgnoreCase(".gif")  ||
+                        item_ext.equalsIgnoreCase(".tiff")) {
+
+                    if (selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent picIntent = new Intent();
+                            picIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            picIntent.setDataAndType(Uri.fromFile(selFile), "image/*");
+                            startActivity(picIntent);
+                        }
+                    }
+                }
+
+                /*video file selected--add more video formats*/
+                else if(item_ext.equalsIgnoreCase(".m4v") ||
+                        item_ext.equalsIgnoreCase(".3gp") ||
+                        item_ext.equalsIgnoreCase(".wmv") ||
+                        item_ext.equalsIgnoreCase(".mp4") ||
+                        item_ext.equalsIgnoreCase(".ogg") ||
+                        item_ext.equalsIgnoreCase(".wav")) {
+
+                    if (selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent movieIntent = new Intent();
+                            movieIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            movieIntent.setDataAndType(Uri.fromFile(selFile), "video/*");
+                            startActivity(movieIntent);
+                        }
+                    }
+                }
+
+                /* gzip files, this will be implemented later */
+                else if(item_ext.equalsIgnoreCase(".gzip") ||
+                        item_ext.equalsIgnoreCase(".gz")) {
+
+                    if(mReturnIntent) {
+                        returnIntentResults(selFile);
+
+                    } else {
+                        //TODO:
+                    }
+                }
+
+                /*pdf file selected*/
+                else if(item_ext.equalsIgnoreCase(".pdf")) {
+
+                    if(selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent pdfIntent = new Intent();
+                            pdfIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            pdfIntent.setDataAndType(Uri.fromFile(selFile),
+                                    "application/pdf");
+
+                            try {
+                                startActivity(pdfIntent);
+                            } catch (ActivityNotFoundException e) {
+                                Toast.makeText(this, "Sorry, couldn't find a pdf viewer",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+                /*Android application file*/
+                else if(item_ext.equalsIgnoreCase(".apk")){
+
+                    if(selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent apkIntent = new Intent();
+                            apkIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            apkIntent.setDataAndType(Uri.fromFile(selFile), "application/vnd.android.package-archive");
+                            startActivity(apkIntent);
+                        }
+                    }
+                }
+
+                /* HTML file */
+                else if(item_ext.equalsIgnoreCase(".html")) {
+
+                    if(selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent htmlIntent = new Intent();
+                            htmlIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            htmlIntent.setDataAndType(Uri.fromFile(selFile), "text/html");
+
+                            try {
+                                startActivity(htmlIntent);
+                            } catch(ActivityNotFoundException e) {
+                                Toast.makeText(this, "Sorry, couldn't find a HTML viewer",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+                /* text file*/
+                else if(item_ext.equalsIgnoreCase(".txt")) {
+
+                    if(selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent txtIntent = new Intent();
+                            txtIntent.setAction(android.content.Intent.ACTION_VIEW);
+                            txtIntent.setDataAndType(Uri.fromFile(selFile), "text/plain");
+
+                            try {
+                                startActivity(txtIntent);
+                            } catch(ActivityNotFoundException e) {
+                                txtIntent.setType("text/*");
+                                startActivity(txtIntent);
+                            }
+                        }
+                    }
+                }
+
+                /* generic intent */
+                else {
+                    if(selFile.exists()) {
+                        if(mReturnIntent) {
+                            returnIntentResults(selFile);
+
+                        } else {
+                            Intent generic = new Intent();
+                            generic.setAction(android.content.Intent.ACTION_VIEW);
+                            generic.setDataAndType(Uri.fromFile(selFile), "text/plain");
+
+                            try {
+                                startActivity(generic);
+                            } catch(ActivityNotFoundException e) {
+                                Toast.makeText(this, "Sorry, couldn't find anything " +
+                                                "to open " + selFile.getName(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+                return true;
 
 			case D_MENU_RENAME:
 			case F_MENU_RENAME:
