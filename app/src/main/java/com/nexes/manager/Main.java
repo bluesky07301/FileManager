@@ -42,6 +42,7 @@ import android.view.Window;
 import android.view.MenuItem;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -121,6 +122,13 @@ public final class Main extends ListActivity {
 
         mHandler.setGridListAdapter(mGrid);
 
+        imagegrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                onListItemClick(null, v, position, id);
+            }
+        });
+
         /* register context menu for our list view */
         registerForContextMenu(getListView());
         
@@ -161,6 +169,8 @@ public final class Main extends ListActivity {
 		_inst = this;
     }
 
+
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -196,8 +206,6 @@ public final class Main extends ListActivity {
 			listView.setVisibility(View.VISIBLE);
 
 		}
-
-
 
 	}
 

@@ -3,8 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/offWhite">
+    android:layout_height="fill_parent" >
 
 	<RelativeLayout
 		android:layout_width="match_parent"
@@ -63,7 +62,7 @@
 	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_weight="2" >
+		android:layout_weight="2">
 
 		<GridView
 			android:id="@+id/grid"
@@ -72,7 +71,8 @@
 			android:numColumns="3"
 			android:verticalSpacing="30dp"
 			android:visibility="visible"
-			android:background="@color/offWhite"/>
+			android:background="@color/offWhite"
+			android:paddingTop="20dp"/>
 
 
 		<ListView
