@@ -1,5 +1,5 @@
 
-package com.nexes.manager;
+package com.filemanager;
 
 import java.io.File;
 import java.util.ArrayList;

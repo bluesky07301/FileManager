@@ -1,55 +1,26 @@
-/*
-    Open Manager, an open source file manager for the Android system
-    Copyright (C) 2009, 2010, 2011  Joe Berria <nexesdevelopment@gmail.com>
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-package com.nexes.manager;
+package com.filemanager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
 
-import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.MenuItem;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -60,7 +31,7 @@ import android.util.Log;
 
 
 public final class Main extends ListActivity {
-	public static final String ACTION_WIDGET = "com.nexes.manager.Main.ACTION_WIDGET";
+	public static final String ACTION_WIDGET = "com.filemanager.Main.ACTION_WIDGET";
 	
 	private static final String PREFS_NAME = "ManagerPrefsFile";	//user preference file name
 	private static final String PREFS_HIDDEN = "hidden";
