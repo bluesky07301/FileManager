@@ -20,15 +20,6 @@
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="5dp"
 			android:id="@+id/back_button" />
-		<ImageButton
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:src="@drawable/home"
-			android:background="@drawable/background"
-			android:layout_toRightOf="@+id/back_button"
-			android:layout_centerVertical="true"
-			android:layout_marginLeft="5dp"
-			android:id="@+id/home_button"/>
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

@@ -146,15 +146,6 @@ public class EventHandler implements OnClickListener {
 				}
 				break;
 			
-			case R.id.home_button:
-				stopThumbnailThread();
-				updateDirectory(mFileMang.setHomeDir(Environment.getExternalStorageDirectory().getPath()));
-				Main._inst.updateView();
-                if(mPathLabel != null)
-                    mPathLabel.setText(mFileMang.getCurrentDir());
-
-				break;
-				
 			case R.id.memory_button:
 				Intent memory = new Intent(mContext, MemoryManager.class);
 				mContext.startActivity(memory);
