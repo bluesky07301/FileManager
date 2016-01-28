@@ -31,6 +31,7 @@ public class FileManager {
 	private int mSortType = SORT_ALPHA;
 	private Stack<String> mPathStack;
 	private ArrayList<String> mDirContent;
+	private String homeDir;
 	
 	/**
 	 * Constructs an object of the class
@@ -61,11 +62,18 @@ public class FileManager {
 		//This will eventually be placed as a settings item
 		mPathStack.clear();
 		mPathStack.push("/");
-		mPathStack.push(name);
-		
+		if (!name.equalsIgnoreCase("/"))
+			mPathStack.push(name);
+
+		homeDir = name;
+
 		return populate_list();
 	}
-	
+
+	public String getHomeDir() {
+		return homeDir;
+	}
+
 	/**
 	 * This will determine if hidden files and folders will be visible to the
 	 * user.

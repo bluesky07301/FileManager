@@ -50,9 +50,13 @@ public class EventHandler implements OnClickListener {
 	public EventHandler(Context context, final FileManager manager) {
 		mContext = context;
 		mFileMang = manager;
-		
-		mDataSource = new ArrayList<String>(mFileMang.setHomeDir
-				(Environment.getExternalStorageDirectory().getPath()));
+
+		File file = new File (Environment.getExternalStorageDirectory().getPath());
+		if (file.canRead())
+			mDataSource = new ArrayList<String>(mFileMang.setHomeDir
+					(Environment.getExternalStorageDirectory().getPath()));
+		else
+			mDataSource = new ArrayList<String>(mFileMang.setHomeDir("/"));
 	}
 	
 	/**
@@ -95,7 +99,11 @@ public class EventHandler implements OnClickListener {
 	public void setUpdateLabels(TextView path) {
 		mPathLabel = path;
 	}
-	
+
+	public String getHomeDir () {
+		return mFileMang.getHomeDir();
+	}
+
 	/**
 	 * 
 	 * @param color

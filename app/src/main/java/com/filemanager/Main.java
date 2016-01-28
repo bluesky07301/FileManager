@@ -122,7 +122,7 @@ public final class Main extends ListActivity {
         registerForContextMenu(getListView());
         
         mPathLabel = (TextView)findViewById(R.id.path_label);
-        mPathLabel.setText(Environment.getExternalStorageDirectory().getPath());
+        mPathLabel.setText(mHandler.getHomeDir());
         
         mHandler.setUpdateLabels(mPathLabel);
         
