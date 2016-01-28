@@ -29,8 +29,8 @@
 			android:layout_centerVertical="true"
 			android:layout_centerHorizontal="true" />
 		<Button
-			android:layout_width="50dp"
-			android:layout_height="match_parent"
+			android:layout_width="55dp"
+			android:layout_height="wrap_content"
 			android:text="@string/help_guide"
 			android:id="@+id/help_button"
 			android:background="@drawable/background"
@@ -40,8 +40,8 @@
 			android:layout_centerVertical="true"
 			android:layout_toLeftOf="@+id/memory_button" />
 		<Button
-			android:layout_width="50dp"
-			android:layout_height="match_parent"
+			android:layout_width="55dp"
+			android:layout_height="wrap_content"
 			android:text="@string/memory_info"
 			android:id="@+id/memory_button"
 			android:background="@drawable/background"
