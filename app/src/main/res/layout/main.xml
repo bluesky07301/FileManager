@@ -7,6 +7,7 @@
 
 	<RelativeLayout
 		android:layout_width="match_parent"
+		android:id="@+id/titlebar"
 		android:layout_height="70dp"
 		android:background="@color/brightBlue"
 		android:gravity="center">
@@ -38,12 +39,24 @@
 			android:layout_centerHorizontal="true" />
 		<Button
 			android:layout_width="50dp"
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
+			android:text="@string/help_guide"
+			android:id="@+id/help_button"
+			android:background="@drawable/background"
+			android:textSize="12dp"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:layout_centerVertical="true"
+			android:layout_toLeftOf="@+id/memory_button" />
+		<Button
+			android:layout_width="50dp"
+			android:layout_height="match_parent"
 			android:text="@string/memory_info"
 			android:id="@+id/memory_button"
 			android:background="@drawable/background"
 			android:textSize="12dp"
 			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
 			android:layout_centerVertical="true"
 			android:layout_alignParentRight="true"
 			android:layout_alignParentEnd="true" />

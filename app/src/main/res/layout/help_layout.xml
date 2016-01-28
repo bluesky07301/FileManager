@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 	android:layout_width="500dp"
+ 	android:layout_height="wrap_content"
+ 	android:background="@color/darkGray" >
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="55dp"
+		android:id="@+id/help_guide"
+		android:layout_centerHorizontal="true"
+		android:textSize="25dp"
+		android:gravity="center"
+		android:text="@string/help_title"
+		android:background="@color/black"
+		android:textColor="@color/white"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="20dp"
+		android:textSize="20dp"
+		android:lineSpacingExtra="8dp"
+		android:textColor="@color/white"
+		android:text="@string/help_detial"
+		android:layout_below="@+id/help_guide"
+		android:layout_centerHorizontal="true" />
+</RelativeLayout>

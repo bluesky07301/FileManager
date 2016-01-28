@@ -18,8 +18,10 @@
         </activity>
 	    
 	    <activity android:name=".MemoryManager"
-	    		  android:label="About Open Manager"
 	    		  android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".HelpManager"
+            android:label="@string/help_title"
+            android:theme="@android:style/Theme.Dialog" />
 
 	</application>
 

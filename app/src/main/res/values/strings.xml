@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">File Manager</string>
-    <string name="memory_info">Memory Info</string>
-    <string name="internal_stroage">Internal Stroage Info.</string>
+    <string name="memory_info">Memory\nInfo</string>
+    <string name="help_guide">Help\nGuide</string>
+    <string name="help_title">Help Guide</string>
+    <string name="help_detial">Navigate by pressing on the folders.\nIf you long press on an item, the options to Open or Rename it will come up if it is a folder, and the additional option to email the item will appear as well if it is a file, rather than a folder.\nFor Fire TV, navigate left, right, up and down using the directional arrows.\nFor Fire TV, simply long press the remote or controller to have the options appear.\nFor Fire TV, after pressing Rename, press again to make the keyboard appear.\n\nEmail me at jibrahim015@gmail.com if you have any other questions or issues. Always happy to help.</string>    <string name="internal_stroage">Internal Stroage Info.</string>
     <string name="total">Total Memory:</string>
     <string name="free">Free Memory:</string>
     <string name="used">Used Memory:</string>

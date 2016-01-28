@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EventHandler implements OnClickListener {
 	/*
@@ -155,10 +156,14 @@ public class EventHandler implements OnClickListener {
 				break;
 				
 			case R.id.memory_button:
-				Intent help = new Intent(mContext, MemoryManager.class);
-				mContext.startActivity(help);
+				Intent memory = new Intent(mContext, MemoryManager.class);
+				mContext.startActivity(memory);
 				break;
 
+			case R.id.help_button:
+				Intent help = new Intent(mContext, HelpManager.class);
+				mContext.startActivity(help);
+				break;
 		}
 	}
 	

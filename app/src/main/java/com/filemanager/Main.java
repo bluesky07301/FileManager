@@ -12,8 +12,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.MenuItem;
 import android.view.ContextMenu;
@@ -21,6 +23,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -126,7 +129,7 @@ public final class Main extends ListActivity {
         /* setup buttons */
         int[] img_button_id = {R.id.back_button, R.id.home_button};
 
-        int[] button_id = {R.id.memory_button};
+        int[] button_id = {R.id.help_button, R.id.memory_button};
         
         ImageButton[] bimg = new ImageButton[img_button_id.length];
         Button[] bt = new Button[button_id.length];
@@ -140,7 +143,23 @@ public final class Main extends ListActivity {
         	bt[j] = (Button)findViewById(button_id[j]);
         	bt[j].setOnClickListener(mHandler);
         }
-    
+
+		RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.titlebar);
+
+		View view = new View(this);
+		view.setBackgroundColor(0xFF000000);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(1, relativeLayout.getLayoutParams().height - 35);
+		layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.memory_button);
+		layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+		relativeLayout.addView(view, layoutParams);
+
+		View view1 = new View(this);
+		view1.setBackgroundColor(0xFF000000);
+		RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(1, relativeLayout.getLayoutParams().height - 35);
+		layoutParams1.addRule(RelativeLayout.LEFT_OF, R.id.help_button);
+		layoutParams1.addRule(RelativeLayout.CENTER_VERTICAL);
+		relativeLayout.addView(view1, layoutParams1);
+
         Intent intent = getIntent();
         
         if(intent.getAction().equals(Intent.ACTION_GET_CONTENT)) {
