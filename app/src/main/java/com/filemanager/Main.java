@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Layout;
@@ -453,7 +454,8 @@ public final class Main extends ListActivity {
         	menu.setHeaderTitle("File Operations");
             menu.add(0, F_MENU_OPEN, 0, "Open File");
     		menu.add(0, F_MENU_RENAME, 0, "Rename File");
-    		menu.add(0, F_MENU_ATTACH, 0, "Email File");
+			if (!Build.MODEL.equalsIgnoreCase("AFTB"))
+    			menu.add(0, F_MENU_ATTACH, 0, "Email File");
     	}	
     }
     
