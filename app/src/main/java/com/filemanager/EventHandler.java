@@ -377,7 +377,7 @@ public class EventHandler implements OnClickListener {
     			}
     			
     		} else if (file != null && file.isDirectory()) {
-    			mViewHolder.icon.setImageResource(R.drawable.folder);
+    			mViewHolder.icon.setImageResource(R.drawable.folderlist);
     		}
     		    		
     		String permission = getFilePermissions(file);
@@ -539,7 +539,7 @@ public class EventHandler implements OnClickListener {
                 }
 
             } else if (file != null && file.isDirectory()) {
-                mViewHolder.icon.setImageResource(R.drawable.icon);
+                mViewHolder.icon.setImageResource(R.drawable.foldergrid);
             }
 
             mViewHolder.name.setText(file.getName());
