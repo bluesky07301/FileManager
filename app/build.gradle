@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.filemanager"
+        applicationId "com.filemanager.pros"
         minSdkVersion 10
         targetSdkVersion 23
     }

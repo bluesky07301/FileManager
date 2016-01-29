@@ -1,5 +1,5 @@
 
-package com.filemanager;
+package com.filemanager.pros;
 
 import java.io.File;
 
@@ -13,10 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.MenuItem;
 import android.view.ContextMenu;

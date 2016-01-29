@@ -1,5 +1,5 @@
 
-package com.filemanager;
+package com.filemanager.pros;
 
 import android.app.Activity;
 import android.os.Bundle;

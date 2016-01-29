@@ -1,5 +1,5 @@
 
-package com.filemanager;
+package com.filemanager.pros;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
