@@ -454,7 +454,7 @@ public final class Main extends ListActivity {
         	menu.setHeaderTitle("File Operations");
             menu.add(0, F_MENU_OPEN, 0, "Open File");
     		menu.add(0, F_MENU_RENAME, 0, "Rename File");
-			if (!Build.MODEL.equalsIgnoreCase("AFTB"))
+			if (Build.MODEL.substring(0, 3).equalsIgnoreCase("AFT") == false)
     			menu.add(0, F_MENU_ATTACH, 0, "Email File");
     	}	
     }
