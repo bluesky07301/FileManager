@@ -16,6 +16,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import com.startapp.android.publish.AdDisplayListener;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
 import com.startapp.android.publish.banner.Banner;
+import com.startapp.android.publish.banner.BannerListener;
 
 import java.io.File;
 
@@ -182,6 +185,16 @@ public final class Main extends ListActivity {
         	mHandler.updateDirectory(mFileMag.getNextDir(intent.getExtras().getString("folder"), true));
 
         }
+
+		banner = (com.startapp.android.publish.banner.Banner) findViewById(R.id.startAppBanner);
+
+		LinearLayout bannerLayout = (LinearLayout) findViewById(R.id.bannerLayout);
+		bannerLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				banner.hideBanner();
+			}
+		});
 
 		_inst = this;
     }
@@ -840,7 +853,7 @@ public final class Main extends ListActivity {
     		
     	} else if(keycode == KeyEvent.KEYCODE_BACK && !mUseBackKey && current.equals("/")) {
     		finish();
-    		
+
     		return false;
     	}
     	return false;
