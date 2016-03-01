@@ -29,6 +29,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.startapp.android.publish.Ad;
+import com.startapp.android.publish.AdDisplayListener;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
 import com.startapp.android.publish.banner.Banner;
@@ -40,6 +42,7 @@ public final class Main extends ListActivity {
 
 	private StartAppAd startAppAd = new StartAppAd(this);
 	private Banner banner;
+	private boolean showAd = true;
 
 	public static final String ACTION_WIDGET = "com.filemanager.Main.ACTION_WIDGET";
 	
@@ -77,7 +80,7 @@ public final class Main extends ListActivity {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
 
-        /*read settings*/
+		/*read settings*/
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         boolean hide = mSettings.getBoolean(PREFS_HIDDEN, true);
         boolean thumb = mSettings.getBoolean(PREFS_THUMBNAIL, true);
@@ -233,6 +236,52 @@ public final class Main extends ListActivity {
 		finish();
 	}
 
+	public void showAd() {
+
+		if (!showAd) {
+			showAd = true;
+			return;
+		}
+
+		// Show an Ad
+		startAppAd.showAd(new AdDisplayListener() {
+
+			/**
+			 * Callback when Ad has been hidden
+			 * @param ad
+			 */
+			@Override
+			public void adHidden(Ad ad) {
+			}
+
+			/**
+			 * Callback when ad has been displayed
+			 * @param ad
+			 */
+			@Override
+			public void adDisplayed(Ad ad) {
+			}
+
+			/**
+			 * Callback when ad has been clicked
+			 * @param ad
+			 */
+			@Override
+			public void adClicked(Ad arg0) {
+			}
+
+			/**
+			 * Callback when ad not displayed
+			 * @param ad
+			 */
+			@Override
+			public void adNotDisplayed(Ad arg0) {
+			}
+		});
+
+		showAd = false;
+	}
+
 	public void updateView () {
 
 		GridView gridView = (GridView)findViewById(R.id.grid);
@@ -243,6 +292,8 @@ public final class Main extends ListActivity {
                 || mFileMag.getCurrentDir().equalsIgnoreCase("/mnt/sdcard")) {
 			gridView.setVisibility(View.VISIBLE);
 			listView.setVisibility(View.INVISIBLE);
+
+			showAd();
 
 		} else {
 			gridView.setVisibility(View.INVISIBLE);

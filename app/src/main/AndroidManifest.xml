@@ -29,6 +29,11 @@
             android:label="@string/help_title"
             android:theme="@android:style/Theme.Dialog" />
 
+        <activity
+            android:name="com.startapp.android.publish.OverlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
 	</application>
 
 </manifest> 
