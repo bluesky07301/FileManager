@@ -1,8 +1,6 @@
 
 package com.filemanager.pros.free;
 
-import java.io.File;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
@@ -13,26 +11,36 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ImageButton;
-import android.widget.Button;
 import android.widget.Toast;
-import android.util.Log;
+
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppSDK;
+import com.startapp.android.publish.banner.Banner;
+
+import java.io.File;
 
 
 public final class Main extends ListActivity {
+
+	private StartAppAd startAppAd = new StartAppAd(this);
+	private Banner banner;
+
 	public static final String ACTION_WIDGET = "com.filemanager.Main.ACTION_WIDGET";
 	
 	private static final String PREFS_NAME = "ManagerPrefsFile";	//user preference file name
@@ -64,9 +72,11 @@ public final class Main extends ListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		StartAppSDK.init(this, "201025739", true);
+
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-        
+
         /*read settings*/
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         boolean hide = mSettings.getBoolean(PREFS_HIDDEN, true);
@@ -173,7 +183,34 @@ public final class Main extends ListActivity {
 		_inst = this;
     }
 
+	/**
+	 * Part of the activity's life cycle, StartAppAd should be integrated here.
+	 */
+	@Override
+	public void onResume() {
+		super.onResume();
+		startAppAd.onResume();
+	}
 
+	/**
+	 * Part of the activity's life cycle, StartAppAd should be integrated here
+	 * for the home button exit ad integration.
+	 */
+	@Override
+	public void onPause() {
+		super.onPause();
+		startAppAd.onPause();
+	}
+
+	/**
+	 * Part of the activity's life cycle, StartAppAd should be integrated here
+	 * for the back button exit ad integration.
+	 */
+	@Override
+	public void onBackPressed() {
+		startAppAd.onBackPressed();
+		super.onBackPressed();
+	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {

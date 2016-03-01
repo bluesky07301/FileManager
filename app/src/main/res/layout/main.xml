@@ -63,35 +63,47 @@
 		android:paddingLeft="8dp"
 		android:layout_weight="0"/>
 
-	<FrameLayout
+	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_weight="2">
+		android:layout_height="match_parent">
 
-		<GridView
-			android:id="@+id/grid"
+		<FrameLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:numColumns="3"
-			android:verticalSpacing="30dp"
-			android:visibility="visible"
-			android:background="@color/offWhite"
-			android:longClickable="true"
-			android:focusable="true"
-			android:paddingTop="20dp"/>
+			android:layout_height="match_parent">
+
+			<GridView
+				android:id="@+id/grid"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:numColumns="3"
+				android:verticalSpacing="30dp"
+				android:visibility="visible"
+				android:background="@color/offWhite"
+				android:longClickable="true"
+				android:focusable="true"
+				android:paddingTop="20dp"/>
 
 
-		<ListView
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:drawSelectorOnTop="true"
-			android:smoothScrollbar="true"
-			android:longClickable="true"
-			android:background="@color/black"
-			android:id="@+id/android:list"
-			android:visibility="invisible"/>
+			<ListView
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:drawSelectorOnTop="true"
+				android:smoothScrollbar="true"
+				android:longClickable="true"
+				android:background="@color/black"
+				android:id="@+id/android:list"
+				android:visibility="invisible"/>
 
-	</FrameLayout>
+		</FrameLayout>
+
+		<com.startapp.android.publish.banner.Banner
+			android:id="@+id/startAppBanner"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true" />
+
+	</RelativeLayout>
 
 </LinearLayout>
 
