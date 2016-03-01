@@ -25,9 +25,12 @@
 			android:layout_height="wrap_content"
 			android:text="@string/app_name"
 			android:id="@+id/textView"
-			android:textSize="35dp"
+			android:textSize="30dp"
+			android:textColor="#FFFFFF"
+			android:layout_marginLeft="10dp"
 			android:layout_centerVertical="true"
-			android:layout_centerHorizontal="true" />
+			android:layout_toRightOf="@+id/back_button"
+			android:layout_toEndOf="@+id/back_button" />
 		<Button
 			android:layout_width="55dp"
 			android:layout_height="wrap_content"
